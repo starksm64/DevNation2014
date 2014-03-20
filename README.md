@@ -9,7 +9,8 @@ as POJOs in the JBoss Wildfly server.
 Introduction
 ---------------------
 
-This project includes
+This project includes EE7 component projects that illustrate connecting to the ARM
+NSP server
 
 * iotbof-ear : The EE7 EAR containing the project EJB, WAR
 * iotbof-ejb : An EE7 singleton EJB that connects to the NSP
@@ -17,4 +18,15 @@ This project includes
 * iotbof-test : Tests for the project elements
 * iotbof-web : A web application that receives push notifications of sensor information
 as well as simple web pages for viewing the sensor data.
+
+Wildfly Configuration
+---------------------
+
+    <subsystem xmlns="urn:jboss:domain:naming:2.0">
+       <bindings>
+          <simple name="java:global/NSPDomain" value="domain" type="java.lang.String"/>
+          <simple name="java:global/NSPURL" value="http://red-hat-summit.cloudapp.net:8081/" type="java.net.URL"/>
+          <simple name="java:global/NotificationCallbackURL" value="http://reponsehost:port/events/..." type="java.net.URL"/>
+       </bindings>
+    </subsystem>
 
