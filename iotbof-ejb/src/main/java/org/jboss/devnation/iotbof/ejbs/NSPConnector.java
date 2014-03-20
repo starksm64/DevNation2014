@@ -25,19 +25,37 @@ import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import java.net.URL;
 import java.util.List;
 
 /**
  * A singleton ejb that initializes the connections to the NSP and provides
  * information about the devices connected to the NSP
+<subsystem xmlns="urn:jboss:domain:naming:2.0">
+   <bindings>
+      <simple name="java:global/NSPDomain" value="domain" type="java.lang.String"/>
+      <simple name="java:global/NSPURL" value="http://red-hat-summit.cloudapp.net:8081/" type="java.net.URL"/>
+      <simple name="java:global/NotificationCallbackURL" value="http://reponsehost:port/events/..." type="java.net.URL"/>
+   </bindings>
+</subsystem>
  */
 @Singleton
 @Startup
 public class NSPConnector {
    private static final Logger logger = Logger.getLogger(NSPConnector.class);
 
+   /**
+    * The NSP domain name used when communicating with the server
+    *
+    */
    @Resource(name = "java:global/NSPDomain")
    private String domain = "domain";
+   @Resource(name = "java:global/NotificationCallbackURL")
+   private URL notificationURL;
+   /**
+    * The NSP communication interface
+    * @see org.jboss.devnation.iotbof.weld.WeldProducerMethods#getNSPImplementation()
+    */
    @Inject
    private INSP nspApi;
 
@@ -52,6 +70,9 @@ public class NSPConnector {
       // Validate the domain
       if (domain == null)
          throw new IllegalStateException("The domain field is null");
+
+      if (notificationURL != null)
+         nspApi.setNotificationHandler(domain, notificationURL.toExternalForm());
 
       // Step 1, query the server to validate connection configuration
       String serverInfo = nspApi.getServerInfo();
@@ -78,8 +99,9 @@ public class NSPConnector {
                String value = NSPClient.queryEndpointResourceValue(domain, name, er.getUri(), false, false);
                logger.infof("%s(%s)=%s\n", name, er.getUri(), value);
                // Step 3, register for updates
-               if (er.getObs().equalsIgnoreCase("true")) {
-                  logger.infof("Would request updates for: %s(%s)", name, er.getUri());
+               if (er.getObs().equalsIgnoreCase("true") && notificationURL != null) {
+                  nspApi.subscribeEndpointResource(domain, name, er.getUri());
+                  logger.infof("Requested updates for: %s(%s)", name, er.getUri());
                }
             }
          }
