@@ -56,7 +56,8 @@ public class NSPClient {
             System.out.printf("\t%s: %s\n", key, headers.getFirst(key));
          }
          System.out.printf("--- End Headers:\n");
-
+         Object body = requestContext.getEntity();
+         System.out.printf("%s\n--- End Body:\n", body);
       }
 
       @Override
