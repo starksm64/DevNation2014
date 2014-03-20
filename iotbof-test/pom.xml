@@ -25,6 +25,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.jboss.devnation</groupId>
+            <artifactId>iotbof-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
              <groupId>org.jboss.devnation</groupId>
              <artifactId>iotbof-sdk</artifactId>
              <version>${project.version}</version>
