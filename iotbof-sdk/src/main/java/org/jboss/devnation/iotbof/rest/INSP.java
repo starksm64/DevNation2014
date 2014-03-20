@@ -13,6 +13,7 @@ package org.jboss.devnation.iotbof.rest;
  * limitations under the License.
  */
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -30,6 +31,10 @@ import java.util.List;
  */
 public interface INSP {
 
+   /**
+    * Query the NSP server for its version information
+    * @return a server version string
+    */
    @GET
    @Path("/")
    @Produces("text/plain")
@@ -60,7 +65,7 @@ public interface INSP {
     * @param resourcePath - the relative path of the resource to access the value of
     * @param sync - indicate whether this request is synchronous or asynchronous
     * @param cacheOnly - if true then response will come only from cache
-    * @return
+    * @return the resource value as a string
     */
    @GET
    @Path("/{domain}/endpoints/{endpoint}{resourcePath}")
@@ -76,9 +81,12 @@ public interface INSP {
    @Produces("application/json")
    public String subscribeEndpointResource(@PathParam("domain") String domain,
                                        @PathParam("endpoint") String endpoint,
-                                       @PathParam("resourcePath") String resourcePath,
-                                       @DefaultValue("false") @QueryParam("sync") boolean sync,
-                                       @DefaultValue("false") @QueryParam("cacheOnly") boolean cacheOnly);
+                                       @PathParam("resourcePath") String resourcePath);
+
+   @PUT
+   @Path("/{domain}/notification/push-url")
+   @Consumes("text/plain")
+   public String setNotificationHandler(@PathParam("domain") String domain, String pushURL);
 
    @GET
    @Path("{domain}/notification/push-url")
