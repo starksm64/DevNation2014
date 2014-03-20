@@ -1,7 +1,3 @@
 .idea
 *.iml
-iotbof-ear/target/*
-iotbof-ejb/target/*
-iotbof-sdk/target/*
-iotbof-test/target/*
-iotbof-web/target/*
+target/
