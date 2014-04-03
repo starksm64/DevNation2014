@@ -30,23 +30,22 @@
         <arquillian.version>1.1.3.Final</arquillian.version>
         <resteasy.version>3.0.6.Final</resteasy.version>
         <!-- JBoss dependency versions -->
-
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
-
         <version.wildfly>8.0.0.Final</version.wildfly>
-
         <version.jboss.spec.javaee>1.0.0.Final</version.jboss.spec.javaee>
-
+        <wildfly.home>/Users/starksm/Dev/JBoss/Wildfly/wildfly-8.0.0.Final</wildfly.home>
 
         <!-- other plugin versions -->
         <version.compiler.plugin>3.1</version.compiler.plugin>
-        <version.ear.plugin>2.6</version.ear.plugin>
+        <version.ear.plugin>2.9</version.ear.plugin>
         <version.ejb.plugin>2.3</version.ejb.plugin>
-        <version.war.plugin>2.1.1</version.war.plugin>
+        <version.war.plugin>2.4</version.war.plugin>
 
         <!-- maven-compiler-plugin -->
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
+        <!-- Richfaces -->
+        <org.richfaces.bom.version>4.2.2.Final</org.richfaces.bom.version>
     </properties>
 
     <build>
@@ -58,11 +57,20 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12</version>
+                <version>2.17</version>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
+                <configuration>
+                    <jboss-home>${wildfly.home}</jboss-home>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -84,7 +92,6 @@
                 <artifactId>iotbof-web</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
-                <scope>compile</scope>
             </dependency>
 
             <!-- Define the version of JBoss' Java EE 7 APIs we want to import.
@@ -154,28 +161,41 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <version>4.11</version>
-          <scope>test</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-           	<artifactId>resteasy-bom</artifactId>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-7.0</artifactId>
+            <version>${version.jboss.spec.javaee}</version>
             <type>pom</type>
-           	<version>${resteasy.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
-           	<artifactId>resteasy-client</artifactId>
-           	<version>${resteasy.version}</version>
+            <artifactId>resteasy-bom</artifactId>
+            <type>pom</type>
+            <version>${resteasy.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>${resteasy.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson-provider</artifactId>
             <version>3.0.4.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.jboss.resteasy</groupId>
+        	<artifactId>jaxrs-api</artifactId>
+        	<version>${resteasy.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

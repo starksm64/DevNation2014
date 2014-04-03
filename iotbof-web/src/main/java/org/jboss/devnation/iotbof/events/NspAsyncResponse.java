@@ -13,17 +13,55 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
 public class NspAsyncResponse {
+   private static Pattern idpattern = Pattern.compile("(\\d+)#([^@]+)@([^/]+)(.*)");
+   public static enum IDParts {
+      NID,
+      EndpointName,
+      Domain,
+      URI
+   }
+   // A string like '{"async-response-id":"54696#mbed-ethernet-1DE41@domain/3/0/2"}'
    private String id;
    private String status;
    private String error;
    private String ct;
    private String maxAge;
+   private String payload;
+
+   /**
+    *
+    * @return
+    */
+   public String[] getIdParts() {
+      // Split the 54696#mbed-ethernet-1DE41@domain/3/0/2 into (nid)#(epname)@(domain)(uri)
+      Matcher m = idpattern.matcher(id);
+      if(m.matches() == false)
+         return null;
+      String[] groups = new String[m.groupCount()];
+      for(int n = 1; n <= m.groupCount(); n ++) {
+         groups[n-1] = m.group(n);
+      }
+      return groups;
+   }
+
+   /**
+    * Decode the base64 encoded payload
+    * @see DatatypeConverter#parseBase64Binary(String)
+    * @return
+    */
+   public String decodePayload() {
+      byte[] frombase64 = DatatypeConverter.parseBase64Binary(payload);
+      return new String(frombase64);
+   }
 
    public String getPayload() {
       return payload;
@@ -74,7 +112,7 @@ public class NspAsyncResponse {
       this.maxAge = maxAge;
    }
 
-   private String payload;
-
-
+   public String toString() {
+      return String.format("async-id=%s, status=%s, payload=%s, maxAge=%s", id, status, payload, maxAge);
+   }
 }

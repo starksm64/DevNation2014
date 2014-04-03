@@ -1,4 +1,4 @@
-package org.jboss.devnation.iotbof.events;
+package test.nsp;
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,20 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import org.jboss.devnation.iotbof.events.NspAsyncResponse;
+import org.junit.Test;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
-@ApplicationPath("/rest")
-public class NspApplication extends Application {
-   public NspApplication() {
+public class TestAsyncResponse {
+   @Test
+   public void testIdParsing() {
+      NspAsyncResponse response = new NspAsyncResponse();
+      response.setId("{\"async-response-id\":\"54696#mbed-ethernet-1DE41@domain/3/0/2\"}");
+      String[] parts = response.getIdParts();
+      for(NspAsyncResponse.IDParts p : NspAsyncResponse.IDParts.values()) {
+         System.out.printf("%s = %s\n", p.name(), parts[p.ordinal()]);
+      }
    }
 }

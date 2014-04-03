@@ -1,5 +1,4 @@
-package org.jboss.devnation.iotbof.events;
-/*
+package org.jboss.devnation.iotbof.rest;/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,14 +12,12 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-
-/**
+/** Common interface the resource enum support
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
-@ApplicationPath("/rest")
-public class NspApplication extends Application {
-   public NspApplication() {
-   }
+public interface IResourceType {
+   public String name();
+   public int getID();
+   public String getAccessType();
+   public String getDescription();
 }

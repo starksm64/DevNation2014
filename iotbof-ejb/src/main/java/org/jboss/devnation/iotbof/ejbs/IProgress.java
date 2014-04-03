@@ -1,4 +1,4 @@
-package org.jboss.devnation.iotbof.events;
+package org.jboss.devnation.iotbof.ejbs;
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
-@ApplicationPath("/rest")
-public class NspApplication extends Application {
-   public NspApplication() {
-   }
+public interface IProgress {
+   /**
+    * Update the progress of a series of tasks
+    * @param current - the current task number
+    * @param max - the current max number of tasks
+    */
+   public void updateProgress(int current, int max, String msg);
 }

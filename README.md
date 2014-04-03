@@ -1,5 +1,5 @@
 # Red Hat/ARM IoT BOF/Hackfest
-![Red Hat](images/rh-logo-blk.png) | ![](images/arm_logo.gif) | ![mbed](images/mbed.png =40x37)
+![Red Hat](images/rh-logo-blk.png) + ![](images/arm_mbed.jpg)
 
 Summary: A collection of projects that interfaces with the
 [Sensinode Developer](https://silver.arm.com/browse/SEN00) NanoService 1.11 Developer
@@ -11,6 +11,23 @@ as POJOs in the JBoss Wildfly server.
 ![](images/NXP_LPC1768.png)
 ### mbed Application Board
 ![](images/app_board_front_small_map1.png)
+#### Application Board Feature list
+
+1. 128x32 Graphics LCD
+2. 5 way joystick
+3. 2 x Potentiometers
+4. 3.5mm Audio jack (Analog Out)
+5. Speaker, PWM Conencted
+6. 3 Axis +/1 1.5g Accelerometer
+7. 3.5mm Audio jack (Analog In)
+8. 2 x Servo motor headers
+9. RGB LED, PWM connected
+10. USB-mini-B Connector
+11. Temperature sensor
+12. Socket for for Xbee (Zigbee) or RN-XV (Wifi)
+13. RJ45 Ethernet conenctor
+14. USB-A Connector
+15. 1.3mm DC Jack input
 
 # Introduction
 ---------------------
@@ -56,5 +73,12 @@ Pull this file into an editor, and search for the subsystem xmlns="urn:jboss:dom
 
 * The java:global/NSPDomain binding provides the domain name on the NSP server for the sensors.
 * The java:global/NSPURL provides the base URL for the NSP REST interface
-* The java:global/NotificationCallbackURL binding provides the URL for the NspNotificationService REST endpoint.
+* The java:global/NotificationCallbackURL binding provides the URL for the NspNotificationService REST endpoint. You will need to change the responsehost:port value to the ipaddress and port where you are running the Wildfly server.
+
+## Building the Project
+To build the project and bring up the NSPViewer application running under Wildfly, perform the following steps:
+1. git clone https://github.com/starksm64/DevNation2014.git to create the DevNation2014 repository
+2. cd DevNation2014
+3. Build the project by running mvn install
+4. Run the application by running mvn wildfly:run
 

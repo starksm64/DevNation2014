@@ -13,6 +13,8 @@ package org.jboss.devnation.iotbof.rest;
  * limitations under the License.
  */
 
+import java.util.List;
+
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
@@ -20,6 +22,7 @@ public class Endpoint {
    private String name;
    private String type;
    private String status;
+   private List<EndpointResource> resources;
 
    public String getName() {
       return name;
@@ -45,12 +48,24 @@ public class Endpoint {
       this.status = status;
    }
 
+   public List<EndpointResource> getResources() {
+      return resources;
+   }
+   public void setResources(List<EndpointResource> resources) {
+      this.resources = resources;
+   }
+
    @Override
    public String toString() {
-      return "Endpoint{" +
-         "name='" + name + '\'' +
-         ", type='" + type + '\'' +
-         ", status='" + status + '\'' +
-         '}';
+      int count = resources != null ? resources.size() : 0;
+      return String.format("Endpoint{name=%s,type=%s,status=%s,resCount=%d}", name, type, status, count);
+   }
+
+   public EndpointResource getResource(String resURI) {
+      for(EndpointResource resource : resources) {
+         if(resource.getUri().equals(resURI))
+            return resource;
+      }
+      return null;
    }
 }

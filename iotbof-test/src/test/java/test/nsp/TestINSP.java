@@ -58,12 +58,6 @@ public class TestINSP {
    }
 
    @Test
-   public void setNotificationHandler() throws Exception {
-      String msg = nspApi.setNotificationHandler("domain", "http://dmz.starkinternational.com:8081/iotbof-web/events/send");
-      System.out.printf("Msg: %s\n", msg);
-   }
-
-   @Test
    public void queryEndpointResourceValues() throws Exception {
       List<Endpoint> endpoints = nspApi.queryEndpoints("domain", true);
       System.out.printf("Endpoints: %s\n", endpoints);

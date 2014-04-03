@@ -1,5 +1,4 @@
-package org.jboss.devnation.iotbof.events;
-/*
+package org.jboss.devnation.iotbof.events;/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,14 +12,21 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.ext.Provider;
+import java.io.IOException;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
-@ApplicationPath("/rest")
-public class NspApplication extends Application {
-   public NspApplication() {
+@Provider
+public class LoggerFilter implements ContainerRequestFilter {
+   public LoggerFilter() {
+      System.out.printf("LoggerFilter initialized\n");
+   }
+   @Override
+   public void filter(ContainerRequestContext requestContext) throws IOException {
+      System.out.printf("uri=%s, method=%s\n", requestContext.getUriInfo(), requestContext.getMethod());
    }
 }

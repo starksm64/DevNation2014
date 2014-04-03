@@ -1,4 +1,4 @@
-package org.jboss.devnation.iotbof.events;
+package org.jboss.devnation.iotbof.beans;
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,34 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import org.jboss.devnation.iotbof.rest.Endpoint;
+
+import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
-@ApplicationPath("/rest")
-public class NspApplication extends Application {
-   public NspApplication() {
+@Named("endpointView")
+@ViewScoped
+public class EndpointView {
+   private Endpoint endpoint;
+
+   public EndpointView() {
+   }
+   public EndpointView(Endpoint endpoint) {
+      this.endpoint = endpoint;
+   }
+
+   public Endpoint getEndpoint() {
+      return endpoint;
+   }
+
+   public void setEndpoint(Endpoint endpoint) {
+      this.endpoint = endpoint;
+   }
+
+   public String toString() {
+      return endpoint.toString();
    }
 }

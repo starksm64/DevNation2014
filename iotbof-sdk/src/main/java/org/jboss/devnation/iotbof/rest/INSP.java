@@ -92,4 +92,5 @@ public interface INSP {
    @Path("{domain}/notification/push-url")
    @Produces("text/plain")
    public String getNotificationHandler(@PathParam("domain") String domain);
+
 }

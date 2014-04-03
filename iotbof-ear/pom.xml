@@ -45,7 +45,7 @@
                 <!-- configuring the ear plugin -->
                 <configuration>
                     <!-- Tell Maven we are using Java EE 7 -->
-                    <version>6</version>
+                    <version>7</version>
                     <!-- Use Java EE ear libraries as needed. Java EE ear libraries
                         are in easy way to package any libraries needed in the ear, and automatically
                         have any modules (EJB-JARs and WARs) use them -->
@@ -57,7 +57,7 @@
                         <webModule>
                             <groupId>org.jboss.devnation</groupId>
                             <artifactId>iotbof-web</artifactId>
-                            <contextRoot>/nspevents</contextRoot>
+                            <contextRoot>/iotbof-web</contextRoot>
                         </webModule>
                     </modules>
                     <fileNameMapping>no-version</fileNameMapping>
@@ -71,6 +71,7 @@
                 <configuration>
                     <filename>${project.artifactId}.ear</filename>
                     <skip>false</skip>
+                    <jvm-args>-agentlib:jdwp=transport=dt_socket,address=8999,server=y,suspend=n -Xms64m -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true</jvm-args>
                 </configuration>
             </plugin>
         </plugins>

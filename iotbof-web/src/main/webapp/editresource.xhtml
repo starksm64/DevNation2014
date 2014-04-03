@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<!-- Edit resource page for an Endpoint -->
+<h:head>
+    <title>Edit Resource: #{endpointResourceView.resourceName}</title>
+</h:head>
+<h:body>
+    <f:metadata>
+        <f:viewParam id="resURIVP" name="resURI" required="true" value="#{endpointResourceView.resourceURI}"
+                     requiredMessage="resURI is required"/>
+        <f:viewParam id="epnameVP" name="epname" required="true" value="#{endpointResourceView.endpointName}"
+                     requiredMessage="epname is required"/>
+        <f:event type="preRenderView" listener="#{endpointResourceView.init}" />
+    </f:metadata>
+    <ui:debug hotkey="x" rendered="#{facesContext.application.projectStage == 'Development'}"/>
+    <p:panel id="panel" header="Edit Resource: #{endpointResourceView.resourceName} for: #{endpointResourceView.endpoint.name}">
+        <h:form>
+            <h:panelGrid columns="3" cellpadding="5">
+                <h:outputLabel value="Resource Value:" />
+                <h:inputText value="#{endpointResourceView.editValue}"/>
+                <h:commandButton value="Save" actionListener="#{endpointResourceView.save}" />
+            </h:panelGrid>
+        </h:form>
+    </p:panel>
+
+    <p:ajaxStatus style="width:64px;height:64px;position:fixed;right:5px;bottom:5px">
+        <f:facet name="start">
+            <p:graphicImage value="/images/loading.gif"/>
+        </f:facet>
+
+        <f:facet name="complete">
+            <h:outputText value=""/>
+        </f:facet>
+    </p:ajaxStatus>
+</h:body>
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<!-- Detail page for an Endpoint -->
+<h:head>
+    <title>Endpoint Detail: #{endpointView.endpoint.name}</title>
+</h:head>
+<h:body>
+    <f:metadata>
+        <f:viewParam id="epnameVP" name="epname" required="true" value="#{endpointView}"
+                     converter="EndpointConverter"
+                     converterMessage="Failed to lookup epname"
+                     requiredMessage="epname is required"/>
+    </f:metadata>
+    <ui:debug hotkey="x" rendered="#{facesContext.application.projectStage == 'Development'}" />
+
+    <p:panel id="panel" header="Endpoint Detail: #{endpointView.endpoint.name}">
+        <p:dataTable id="resTable" value="#{endpointView.endpoint.resources}" var="res">
+            <f:facet name="header">
+                <h:outputText value="Resources"/>
+            </f:facet>
+
+            <p:column headerText="URI">
+                <h:outputText value="#{res.uri}"/>
+            </p:column>
+            <p:column headerText="Type">
+                <h:outputText value="#{res.fullType.objectName}/#{res.fullType.resourceName}"/>
+            </p:column>
+            <p:column headerText="Value">
+                <h:outputText value="#{res.value}" rendered="#{!res.value.contains('async-response-id')}"/>
+                <!-- Link to the async response -->
+                <h:link value="#{res.value}" outcome="asyncresponse" rendered="#{res.value.contains('async-response-id')}">
+                      <f:param name="asyncID" value="#{res.value}"/>
+                </h:link>
+            </p:column>
+            <p:column headerText="Access">
+                <h:outputText value="#{res.fullType.resourceAccessType}" rendered="#{!res.fullType.editable}"/>
+                <!-- Link to edit the resource -->
+                <h:link value="#{res.fullType.resourceAccessType}" outcome="editresource" rendered="#{res.fullType.editable}" >
+                    <f:param name="epname" value="#{endpointView.endpoint.name}" />
+                    <f:param name="resURI" value="#{res.uri}" />
+                </h:link>
+            </p:column>
+            <p:column headerText="Observable">
+                <h:outputText value="#{res.obs}" />
+            </p:column>
+            <f:facet name="footer">
+                In total there are #{endpointView.endpoint.resources.size()} resources.
+            </f:facet>
+        </p:dataTable>
+        <h:link value="Return to Endpoints" outcome="index"/>
+    </p:panel>
+    <p:messages id="messages" autoUpdate="true"/>
+</h:body>
+</html>

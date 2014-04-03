@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+  <title><ui:insert name="title">#{bundle['application.defaultpage.title']}</ui:insert></title>
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+</h:head>
+
+<h:body>
+    <div id="container">
+        <div id="header">
+            <ui:insert name="header">
+                <h1>#{bundle['application.defaultpage.header.content']}</h1>
+            </ui:insert>
+        </div>
+
+        <div id="content">
+            <ui:insert name="content">
+                #{bundle['application.defaultpage.body.content']}
+            </ui:insert>
+        </div>
+
+        <div id="footer">
+            <ui:insert name="footer">
+                <h:link value="Return to Endpoints Page" outcome="index" />
+                <h:outputLink value="#{bundle['wildfly.home']}" title="Powered By Wildfly"/>
+            </ui:insert>
+        </div>
+    </div>
+</h:body>
+</html>

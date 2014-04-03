@@ -136,6 +136,26 @@ public class NSPClient {
 
       return value;
    }
+   @Path("/{domain}/endpoints/{endpoint}{resourcePath}")
+   public static String setEndpointResourceValue(@PathParam("domain") String domain,
+                                 @PathParam("endpoint") String endpoint,
+                                 @PathParam("resourcePath") String resourcePath, String value) {
+      ResteasyClientBuilder rsb = new ResteasyClientBuilder();
+      Client rsc = rsb.build();
+      WebTarget target = rsc.target(BASEURL+"/"+domain+"/endpoints/"+endpoint+resourcePath);
+
+      if(basicAuth != null)
+         target.register(basicAuth);
+      target.register(new ClientLoggingFilter());
+      Entity<String> putValue = Entity.entity(value, MediaType.TEXT_PLAIN_TYPE);
+      Response response = target.request().put(putValue);
+      Object responseEntity = response.getEntity();
+      String responseValue = null;
+      if(responseEntity != null)
+         responseValue = responseEntity.toString();
+      return responseValue;
+
+   }
 
    public static INSP buildINSPProxy() {
       return buildINSPProxy(BASEURL);

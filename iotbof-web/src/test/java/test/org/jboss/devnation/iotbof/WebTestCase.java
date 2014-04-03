@@ -15,6 +15,7 @@ package test.org.jboss.devnation.iotbof;
  */
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.devnation.iotbof.events.NspNotificationService;
@@ -31,16 +32,18 @@ import java.net.URL;
  */
 @RunWith(Arquillian.class)
 public class WebTestCase {
-   @Deployment(testable = false)
+   @Deployment(testable = false, name = "war")
    public static WebArchive createNotTestableDeployment() {
       WebArchive war = ShrinkWrap.create(WebArchive.class);
       war.addClass(NspNotificationService.class);
+      war.addPackages(true, "org.jboss.devnation.iotbof.events", "org.jboss.devnation.iotbof.rest");
+      System.out.println(war.toString(true));
       return war;
    }
 
-   @Test
+   @Test @OperateOnDeployment("war")
    public void testPing(@ArquillianResource URL baseURL) throws Exception {
-      URL sendURL = new URL(baseURL, "/send");
+      URL sendURL = new URL(baseURL, "rest/events/send");
       System.out.printf("Testing %s\n", sendURL);
       HttpURLConnection httpConn = (HttpURLConnection) sendURL.openConnection();
       httpConn.setRequestMethod("PUT");

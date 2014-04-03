@@ -14,10 +14,6 @@
 
     <packaging>jar</packaging>
 
-    <properties>
-        <jboss.home>/Users/starksm//Dev/JBoss/Wildfly/wildfly-${version.wildfly}</jboss.home>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.jboss.devnation</groupId>
@@ -27,6 +23,7 @@
         <dependency>
             <groupId>org.jboss.devnation</groupId>
             <artifactId>iotbof-web</artifactId>
+            <type>war</type>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -51,47 +48,21 @@
             <version>${version.wildfly}</version>
         </dependency>
         <dependency>
-            <groupId>org.jboss.devnation</groupId>
-            <artifactId>iotbof</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-arquillian-container-embedded</artifactId>
             <scope>test</scope>
             <version>${version.wildfly}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.6.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/jbossas</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>${jboss.home}</directory>
-                                    <excludes>
-                                        <exclude>modules/</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -100,10 +71,14 @@
                     <forkMode>always</forkMode>
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                        <jboss.home>${jboss.home}</jboss.home>
-                        <module.path>${jboss.home}/modules</module.path>
+                        <jboss.home>${wildfly.home}</jboss.home>
+                        <module.path>${wildfly.home}/modules</module.path>
                     </systemPropertyVariables>
                     <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                    <excludes>
+                        <exclude>test/http/TestNotificationService.java</exclude>
+                        <exclude>test/nsp/TestINSPNotification.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

@@ -13,14 +13,14 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
-@ApplicationPath("/rest")
-public class NspApplication extends Application {
-   public NspApplication() {
-   }
+public interface INotificationService {
+   /**
+    * Obtain the async response for the given id
+    * @param id the id of the async response as provided by the NSP server
+    * @return the response if found, null otherwise
+    */
+   public NspAsyncResponse getAsyncResponse(String id);
 }

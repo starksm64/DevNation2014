@@ -24,9 +24,14 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.TimedObject;
+import javax.ejb.Timer;
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A singleton ejb that initializes the connections to the NSP and provides
@@ -41,8 +46,9 @@ import java.util.List;
  */
 @Singleton
 @Startup
-public class NSPConnector {
+public class NSPConnector implements TimedObject {
    private static final Logger logger = Logger.getLogger(NSPConnector.class);
+   private ConcurrentHashMap<String, Endpoint> endpoints = new ConcurrentHashMap<>();
 
    /**
     * The NSP domain name used when communicating with the server
@@ -52,12 +58,14 @@ public class NSPConnector {
    private String domain = "domain";
    @Resource(name = "java:global/NotificationCallbackURL")
    private URL notificationURL;
+
    /**
     * The NSP communication interface
     * @see org.jboss.devnation.iotbof.weld.WeldProducerMethods#getNSPImplementation()
     */
    @Inject
    private INSP nspApi;
+   private boolean hasNotificationHandler;
 
    /**
     * Default constructor.
@@ -71,14 +79,9 @@ public class NSPConnector {
       if (domain == null)
          throw new IllegalStateException("The domain field is null");
 
-      if (notificationURL != null)
-         nspApi.setNotificationHandler(domain, notificationURL.toExternalForm());
-
       // Step 1, query the server to validate connection configuration
       String serverInfo = nspApi.getServerInfo();
       logger.infof("Connected to NSP server %s\n", serverInfo);
-      // Step 2, query the server for the available endpoints
-      reload();
    }
 
    @PreDestroy
@@ -86,29 +89,74 @@ public class NSPConnector {
 
    }
 
-   public void reload() {
-      List<Endpoint> endpoints = nspApi.queryEndpoints(domain, false);
-      int count = 0;
-      if (endpoints != null) {
-         count = endpoints.size();
+   public Set<String> getEndpointNames() {
+      return endpoints.keySet();
+   }
+
+   public List<Endpoint> getEndpoints() {
+      return new ArrayList<>(endpoints.values());
+   }
+
+   public Endpoint getEndpoint(String name) {
+      return endpoints.get(name);
+   }
+
+   public void reload(IProgress progress) {
+      List<Endpoint> eps = nspApi.queryEndpoints(domain, false);
+      int count;
+      endpoints.clear();
+      if (eps != null) {
+         count = eps.size();
          logger.infof("Found %d endpoints\n", count);
-         for (Endpoint ep : endpoints) {
-            List<EndpointResource> ers = nspApi.queryEndpointResources(domain, ep.getName());
+         for (int n = 0; n < count; n ++) {
+            Endpoint ep = eps.get(n);
             String name = ep.getName();
+            progress.updateProgress(n, count, "Loading: "+name);
+            logger.infof("Loading %s endpoint\n", name);
+            endpoints.put(name, ep);
+            List<EndpointResource> ers = nspApi.queryEndpointResources(domain, name);
             for (EndpointResource er : ers) {
+               logger.infof("Loading %s%s resource\n", name, er.getUri());
                String value = NSPClient.queryEndpointResourceValue(domain, name, er.getUri(), false, false);
                logger.infof("%s(%s)=%s\n", name, er.getUri(), value);
+               er.setValue(value);
                // Step 3, register for updates
-               if (er.getObs().equalsIgnoreCase("true") && notificationURL != null) {
+               if (er.getObs().equalsIgnoreCase("true") && hasNotificationHandler) {
                   nspApi.subscribeEndpointResource(domain, name, er.getUri());
                   logger.infof("Requested updates for: %s(%s)", name, er.getUri());
                }
             }
+            ep.setResources(ers);
          }
+         progress.updateProgress(count, count, "Completed loading");
       }
    }
 
    public String getServerInfo() {
       return nspApi.getServerInfo();
+   }
+
+   public void enableNotificationHandler() {
+      hasNotificationHandler = false;
+      if (notificationURL != null) {
+         nspApi.setNotificationHandler(domain, notificationURL.toExternalForm());
+         logger.infof("domain(%s), setNotificationHandler to %s\n", domain, notificationURL);
+         hasNotificationHandler = true;
+      } else {
+         logger.warn("No binding for java:global/NotificationCallbackURL found");
+      }
+   }
+
+   public String setEndpointResource(Endpoint endpoint, EndpointResource resource, String value) {
+      logger.infof("domain(%s), setResource(%s:%s) to %s\n", domain, endpoint.getName(), resource.getUri(), value);
+      String ok = NSPClient.setEndpointResourceValue(domain, endpoint.getName(), resource.getUri(), value);
+      logger.infof("setEndpointResource returned %s\n", ok);
+      return ok;
+   }
+
+   @Override
+   public void ejbTimeout(Timer timer) {
+      logger.infof("ejbTimeout, info=%s\n", timer.getInfo());
+
    }
 }

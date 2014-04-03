@@ -25,6 +25,8 @@ public class EndpointResource {
    private String iface;
    private String obs;
    private String type;
+   private String value;
+   private EndpointResourceType fullType;
 
    public String getUri() {
       return uri;
@@ -32,6 +34,7 @@ public class EndpointResource {
 
    public void setUri(String uri) {
       this.uri = uri;
+      this.fullType = new EndpointResourceType(uri);
    }
 
    public String getRt() {
@@ -67,6 +70,18 @@ public class EndpointResource {
       this.type = type;
    }
 
+   public String getValue() {
+      return value;
+   }
+
+   public void setValue(String value) {
+      this.value = value;
+   }
+
+   public EndpointResourceType getFullType() {
+      return fullType;
+   }
+
    @Override
    public String toString() {
       return "EndpointResource{" +
@@ -75,6 +90,7 @@ public class EndpointResource {
          ", if='" + iface + '\'' +
          ", obs='" + obs + '\'' +
          ", type='" + type + '\'' +
+         ", value='" + value + '\'' +
          '}';
    }
 }

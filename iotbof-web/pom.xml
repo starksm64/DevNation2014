@@ -19,6 +19,79 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
         </license>
     </licenses>
+    <repositories>
+        <repository>
+        		<id>prime-repo</id>
+        		<name>Prime Repo</name>
+        		<url>http://repository.primefaces.org</url>
+        	</repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Dependencies on the ejb modules so that they can be found by the war -->
+        <dependency>
+            <groupId>org.jboss.devnation</groupId>
+            <artifactId>iotbof-ejb</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-spec-api</artifactId>
+            <type>pom</type>
+            <scope>provided</scope>
+            <version>${version.wildfly}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-ee</artifactId>
+            <scope>provided</scope>
+            <version>${version.wildfly}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-common</artifactId>
+            <scope>test</scope>
+            <version>${version.wildfly}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-embedded</artifactId>
+            <scope>test</scope>
+            <version>${version.wildfly}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-embedded</artifactId>
+            <scope>test</scope>
+            <version>${version.wildfly}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.faces</groupId>
+            <artifactId>jboss-jsf-api_2.2_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+        		<groupId>org.primefaces</groupId>
+        		<artifactId>primefaces</artifactId>
+        		<version>4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>all-themes</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <!-- Set the name of the war, used as the context root when the app
@@ -29,8 +102,22 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${version.war.plugin}</version>
                 <configuration>
-                    <!-- Java EE 7 doesn't require web.xml, Maven needs to catch up! -->
+                    <!-- Java EE 7 doesn't require web.xml -->
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Fork every test because it will launch a separate AS instance -->
+                    <forkMode>always</forkMode>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <jboss.home>${wildfly.home}</jboss.home>
+                        <module.path>${wildfly.home}/modules</module.path>
+                    </systemPropertyVariables>
+                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
                 </configuration>
             </plugin>
         </plugins>

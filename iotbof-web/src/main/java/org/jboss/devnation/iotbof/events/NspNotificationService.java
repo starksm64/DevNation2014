@@ -14,29 +14,71 @@ package org.jboss.devnation.iotbof.events;
  */
 
 
+import org.jboss.logging.Logger;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
 @Path("/events")
-public class NspNotificationService {
+public class NspNotificationService implements INotificationService {
+   private static final Logger logger = Logger.getLogger(NspNotificationService.class);
+   private static ConcurrentHashMap<String, NspAsyncResponse> asyncResponseMap = new ConcurrentHashMap<>();
+
+   public NspNotificationService() {
+      logger.infof("NspNotificationService.ctor, %s\n", this);
+   }
+
+   @Override
+   public NspAsyncResponse getAsyncResponse(String id) {
+      NspAsyncResponse response = asyncResponseMap.get(id);
+      return response;
+   }
+
    @PUT
    @Path("/send")
    @Consumes("application/json")
    public Response handleNotification(NspNotificationMsg msg) {
 	  System.out.printf("handleNotification: %s\n", msg);
-      return Response.status(200).build();
+      Response response = Response.ok("{}", MediaType.APPLICATION_JSON_TYPE).build();
+      List<NspAsyncResponse> asyncResponses = msg.getAsyncResponses();
+      if(asyncResponses != null && asyncResponses.size() > 0) {
+         for (NspAsyncResponse ar : asyncResponses) {
+            logger.infof("Added AsyncResponse: %s", ar.getId());
+            asyncResponseMap.put(ar.getId(), ar);
+         }
+      }
+      return response;
    }
 
    @PUT
    @Path("/send")
    @Consumes("text/*")
    public Response handlePing(String msg) {
-	  System.out.printf("handlePing: %s\n", msg);
-      return Response.status(200).build();
+	  System.out.printf("handlePing: msg=%s\n", msg);
+      Response response = Response.ok("OK", MediaType.TEXT_PLAIN_TYPE).build();
+      System.out.printf("Response.headers: %s\n", response.getHeaders());
+      return response;
    }
+
+   @GET
+   @Path("{info:.*}")
+   @Consumes("text/*")
+   public Response handleUnknown(@PathParam("info") String info) {
+	  System.out.printf("handleUnknown: info=%s\n", info);
+      Response response = Response.ok("OK", MediaType.TEXT_PLAIN_TYPE).build();
+      System.out.printf("Response.headers: %s\n", response.getHeaders());
+      return response;
+   }
+
+
 }
