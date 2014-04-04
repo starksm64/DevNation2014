@@ -79,10 +79,19 @@ or you can edit the
 
 ## Building the Project
 To build the project and bring up the NSPViewer application running under Wildfly, perform the following steps:
-1. git clone https://github.com/starksm64/DevNation2014.git to create the DevNation2014 repository
-2. cd DevNation2014
-3. Build the project by running mvn install
-4. Run the application by running mvn -DskipTests=true wildfly:run
+
+1. wget http://download.jboss.org/wildfly/8.0.0.Final/wildfly-8.0.0.Final.zip
+    1. unzip wildfly-8.0.0.Final.zip
+    2. Note the path to the wildfly-8.0.0.Final directory as it will be used a wildfly.home in configurations
+2. git clone https://github.com/starksm64/DevNation2014.git to create the DevNation2014 repository
+3. cd DevNation2014
+4. Set JAVA_HOME if needed
+5. edit the pom.xml and
+	1. set the wildfly.home property to the directory path noted above
+	2. cd into the scripts directory and run mvn wildfly:start wildfly:execute-commands
+6. Build the project by running mvn install
+7. cd iotbof-ear
+8. Run the application by running mvn wildfly:run
 
 ## Trouble Shooting
 

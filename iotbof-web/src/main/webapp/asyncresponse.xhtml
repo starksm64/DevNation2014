@@ -9,6 +9,7 @@
 </h:head>
 <h:body>
     <f:metadata>
+        <f:viewParam id="resolve" name="resolve" required="false" />
         <f:viewParam id="asyncID" name="asyncID" required="true" value="#{asyncResponseView}"
                      converter="AsyncResponseConverter"
                      converterMessage="Failed to lookup asyncID"

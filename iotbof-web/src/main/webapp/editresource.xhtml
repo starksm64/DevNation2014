@@ -24,14 +24,13 @@
             </p:menuitem>
         </p:breadCrumb>
     </h:form>
+    <h:form>
     <p:panel id="panel" header="Edit Resource: #{endpointResourceView.resourceName} for: #{endpointResourceView.endpoint.name}">
-        <h:form>
             <h:panelGrid columns="3" cellpadding="5">
                 <h:outputLabel value="Resource Value:" />
                 <h:inputText value="#{endpointResourceView.editValue}"/>
                 <p:commandButton value="Save" actionListener="#{endpointResourceView.save}" />
             </h:panelGrid>
-        </h:form>
     </p:panel>
     <p:panel id="appMessages" header="Messages" toggleable="true" toggleSpeed="2000" widgetVar="appMsgPanel">
         <p:messages id="amessages" autoUpdate="true" showDetail="true" />
@@ -43,6 +42,7 @@
                 </p:menu>
             </f:facet>
     </p:panel>
+    </h:form>
 
     <h:form>
         <p:ajaxStatus style="width:64px;height:64px;position:fixed;right:5px;bottom:5px">

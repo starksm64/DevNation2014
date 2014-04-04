@@ -40,6 +40,7 @@ public class EndpointView {
    private static NSPConnector nspConnector;
    private static INotificationService notificationService;
    private Endpoint endpoint;
+   private boolean resolveValues = true;
 
    static void setConnector(NSPConnector nspConnector) {
       EndpointView.nspConnector = nspConnector;
@@ -60,6 +61,14 @@ public class EndpointView {
 
    public void setEndpoint(Endpoint endpoint) {
       this.endpoint = endpoint;
+   }
+
+   public boolean isResolveValues() {
+      return resolveValues;
+   }
+
+   public void setResolveValues(boolean resolveValues) {
+      this.resolveValues = resolveValues;
    }
 
    /**

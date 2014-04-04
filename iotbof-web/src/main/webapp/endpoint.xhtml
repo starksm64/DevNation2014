@@ -39,7 +39,8 @@
                 <h:outputText value="#{res.value}" rendered="#{!res.value.contains('async-response-id')}"/>
                 <!-- Link to the async response -->
                 <h:link value="#{res.value}" outcome="asyncresponse" rendered="#{res.value.contains('async-response-id')}">
-                      <f:param name="asyncID" value="#{res.value}"/>
+                    <f:param name="asyncID" value="#{res.value}"/>
+                    <f:param name="resolve" value="#{endpointView.resolveValues}"/>
                 </h:link>
             </p:column>
             <p:column headerText="Access">
@@ -57,6 +58,8 @@
                 In total there are #{endpointView.resources.size()} resources.
             </f:facet>
         </p:dataTable>
+            <h:outputText value="Automatically Resolve Async Values: " />
+            <p:selectBooleanCheckbox value="#{endpointView.resolveValues}" />
         </h:form>
     </p:panel>
     <p:messages id="messages" autoUpdate="true"/>

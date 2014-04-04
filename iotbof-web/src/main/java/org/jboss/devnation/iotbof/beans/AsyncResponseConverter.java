@@ -20,10 +20,14 @@ import org.jboss.devnation.iotbof.rest.Endpoint;
 import org.jboss.devnation.iotbof.rest.EndpointResource;
 import org.jboss.logging.Logger;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
+import java.util.Map;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
@@ -54,13 +58,19 @@ public class AsyncResponseConverter implements Converter {
 
    @Override
    public Object getAsObject(FacesContext context, UIComponent component, String value) {
+      ExternalContext externalContext = context.getExternalContext();
+      Map<String, String> parameterMap = externalContext.getRequestParameterMap();
+      String resolveParam = parameterMap.get("resolve");
+      boolean resolve = true;
+      if(resolveParam != null)
+         resolve = Boolean.valueOf(resolveParam);
       String id = extractID(value);
       AsyncID asyncID = new AsyncID(id);
       logger.infof("getAsObject, value=%s, asyncID=%s\n", value, asyncID);
       NspAsyncResponse response = notificationService.getAsyncResponse(id);
       String endpointName = asyncID.getEndpointName();
       AsyncResponseView responseView;
-      if(response == null) {
+      if(response == null && resolve) {
          logger.infof("Failed, requesting resource value...\n");
          String resURI = asyncID.getURI();
          Endpoint endpoint = nspConnector.getEndpoint(endpointName);
@@ -68,8 +78,12 @@ public class AsyncResponseConverter implements Converter {
          EndpointResource resource = endpoint.getResource(resURI);
          resource.setResolvedValue(rvalue);
          responseView = new AsyncResponseView(asyncID, resource);
-      }
-      else {
+      } else if(response == null) {
+         FacesMessage msg = new FacesMessage(String.format("Failed to load resource value, %s", asyncID));
+         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+         context.addMessage(null, msg);
+         throw new ConverterException(msg);
+      } else {
          responseView = new AsyncResponseView(asyncID, response);
       }
       return responseView;
