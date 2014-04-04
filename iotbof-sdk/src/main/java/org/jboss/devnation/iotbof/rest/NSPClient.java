@@ -50,7 +50,8 @@ public class NSPClient {
       @Override
       public void filter(ClientRequestContext requestContext) throws IOException {
          URI uri = requestContext.getUri();
-         System.out.printf("+++ Request to: %s\n--- Headers:\n", uri);
+         String method = requestContext.getMethod();
+         System.out.printf("+++ Request(%s) to: %s\n--- Headers:\n", method, uri);
          MultivaluedMap<String, Object> headers = requestContext.getHeaders();
          for (String key : headers.keySet()) {
             System.out.printf("\t%s: %s\n", key, headers.getFirst(key));
