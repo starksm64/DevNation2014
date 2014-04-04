@@ -69,9 +69,12 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
+                    <jboss-home>${wildfly.home}</jboss-home>
                     <filename>${project.artifactId}.ear</filename>
                     <skip>false</skip>
+                    <!-- For debugging
                     <jvm-args>-agentlib:jdwp=transport=dt_socket,address=8999,server=y,suspend=n -Xms64m -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true</jvm-args>
+                    -->
                 </configuration>
             </plugin>
         </plugins>

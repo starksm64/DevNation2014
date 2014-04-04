@@ -1,4 +1,4 @@
-package test.nsp;
+package test.org.jboss.devnation.iotbof;
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@ package test.nsp;
  */
 
 import org.jboss.devnation.iotbof.events.NspAsyncResponse;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -21,9 +22,17 @@ import org.junit.Test;
  */
 public class TestAsyncResponse {
    @Test
+   public void testAsyncIdParsing() {
+      // Extract the id portion {"async-response-id":"54696#mbed-ethernet-1DE41@domain/3/0/2"}
+      String value = "{\"async-response-id\":\"54696#mbed-ethernet-1DE41@domain/3/0/2\"}";
+      String[] parts = value.split("\"");
+      String id = parts[3];
+      Assert.assertEquals("54696#mbed-ethernet-1DE41@domain/3/0/2", id);
+   }
+   @Test
    public void testIdParsing() {
       NspAsyncResponse response = new NspAsyncResponse();
-      response.setId("{\"async-response-id\":\"54696#mbed-ethernet-1DE41@domain/3/0/2\"}");
+      response.setId("54696#mbed-ethernet-1DE41@domain/3/0/2");
       String[] parts = response.getIdParts();
       for(NspAsyncResponse.IDParts p : NspAsyncResponse.IDParts.values()) {
          System.out.printf("%s = %s\n", p.name(), parts[p.ordinal()]);

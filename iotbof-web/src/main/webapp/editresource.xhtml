@@ -16,25 +16,44 @@
                      requiredMessage="epname is required"/>
         <f:event type="preRenderView" listener="#{endpointResourceView.init}" />
     </f:metadata>
-    <ui:debug hotkey="x" rendered="#{facesContext.application.projectStage == 'Development'}"/>
+    <h:form>
+        <p:breadCrumb>
+            <p:menuitem value="Endpoints" outcome="index"/>
+            <p:menuitem value="Endpoint" outcome="endpoint" includeViewParams="true">
+                <f:param name="epname" value="#{endpointResourceView.endpointName}" />
+            </p:menuitem>
+        </p:breadCrumb>
+    </h:form>
     <p:panel id="panel" header="Edit Resource: #{endpointResourceView.resourceName} for: #{endpointResourceView.endpoint.name}">
         <h:form>
             <h:panelGrid columns="3" cellpadding="5">
                 <h:outputLabel value="Resource Value:" />
                 <h:inputText value="#{endpointResourceView.editValue}"/>
-                <h:commandButton value="Save" actionListener="#{endpointResourceView.save}" />
+                <p:commandButton value="Save" actionListener="#{endpointResourceView.save}" />
             </h:panelGrid>
         </h:form>
     </p:panel>
+    <p:panel id="appMessages" header="Messages" toggleable="true" toggleSpeed="2000" widgetVar="appMsgPanel">
+        <p:messages id="amessages" autoUpdate="true" showDetail="true" />
+            <f:facet name="options">
+                <p:menu>
+                    <p:submenu label="Settings">
+                        <p:menuitem value="Toggle" url="#" icon="ui-icon-newwin" onclick="appMsgPanel.toggle()"/>
+                    </p:submenu>
+                </p:menu>
+            </f:facet>
+    </p:panel>
 
-    <p:ajaxStatus style="width:64px;height:64px;position:fixed;right:5px;bottom:5px">
-        <f:facet name="start">
-            <p:graphicImage value="/images/loading.gif"/>
-        </f:facet>
+    <h:form>
+        <p:ajaxStatus style="width:64px;height:64px;position:fixed;right:5px;bottom:5px">
+            <f:facet name="start">
+                <p:graphicImage value="/images/loading.gif"/>
+            </f:facet>
 
-        <f:facet name="complete">
-            <h:outputText value=""/>
-        </f:facet>
-    </p:ajaxStatus>
+            <f:facet name="complete">
+                <h:outputText value=""/>
+            </f:facet>
+        </p:ajaxStatus>
+    </h:form>
 </h:body>
 </html>

@@ -76,4 +76,14 @@ public class TestINSP {
          }
       }
    }
+
+   @Test
+   public void getNotificationHandler() {
+      try {
+         String handler = nspApi.getNotificationHandler("domain");
+         System.out.printf("handler: %s\n", handler);
+      } catch (NotFoundException e) {
+         System.out.printf("No handler registered\n");
+      }
+   }
 }

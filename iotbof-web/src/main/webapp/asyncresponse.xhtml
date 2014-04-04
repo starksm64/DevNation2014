@@ -15,12 +15,20 @@
                      requiredMessage="asyncID is required"/>
     </f:metadata>
 
+    <h:form>
+        <p:breadCrumb>
+            <p:menuitem value="Endpoints" outcome="index"/>
+            <p:menuitem value="Endpoint" outcome="endpoint" includeViewParams="true">
+                <f:param name="epname" value="#{asyncResponseView.endpointName}" />
+            </p:menuitem>
+        </p:breadCrumb>
+    </h:form>
     <p:panelGrid columns="2">
         <f:facet name="header">
             Async Response Detail: #{asyncResponseView.response.id}
         </f:facet>
 
-        <h:outputLabel value="Value: " />
+        <h:outputLabel value="DecodedValue: " />
         <h:outputText value="#{asyncResponseView.response.decodePayload()}" />
         <h:outputLabel value="RawValue: " />
         <h:outputText value="#{asyncResponseView.response.payload}" />
@@ -30,10 +38,6 @@
         <h:outputText value="#{asyncResponseView.response.maxAge}"/>
     </p:panelGrid>
     <p:separator />
-    <h:link value="Return to Endpoint Resources" outcome="endpoint">
-        <f:param name="epname" value="#{asyncResponseView.endpointName}" />
-    </h:link>
-    <h:link value="Return to Endpoints" outcome="index"/>
     <p:messages />
 </h:body>
 </html>

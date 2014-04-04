@@ -26,6 +26,7 @@ public class EndpointResource {
    private String obs;
    private String type;
    private String value;
+   private String resolvedValue;
    private EndpointResourceType fullType;
 
    public String getUri() {
@@ -76,10 +77,28 @@ public class EndpointResource {
 
    public void setValue(String value) {
       this.value = value;
+      if(hasAsyncValue() == false)
+         resolvedValue = value;
+   }
+
+   public String getResolvedValue() {
+      return resolvedValue;
+   }
+
+   public void setResolvedValue(String resolvedValue) {
+      this.resolvedValue = resolvedValue;
    }
 
    public EndpointResourceType getFullType() {
       return fullType;
+   }
+
+   public boolean hasAsyncValue() {
+      boolean hasAsyncValue = false;
+      if(value != null) {
+         hasAsyncValue = value.contains("async-response-id");
+      }
+      return hasAsyncValue;
    }
 
    @Override
@@ -91,6 +110,7 @@ public class EndpointResource {
          ", obs='" + obs + '\'' +
          ", type='" + type + '\'' +
          ", value='" + value + '\'' +
+         ", resolvedValue='" + resolvedValue + '\'' +
          '}';
    }
 }

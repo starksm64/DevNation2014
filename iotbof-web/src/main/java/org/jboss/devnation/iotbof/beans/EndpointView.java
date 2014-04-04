@@ -13,10 +13,14 @@ package org.jboss.devnation.iotbof.beans;
  * limitations under the License.
  */
 
+import org.jboss.devnation.iotbof.events.INotificationService;
+import org.jboss.devnation.iotbof.events.NspAsyncResponse;
 import org.jboss.devnation.iotbof.rest.Endpoint;
+import org.jboss.devnation.iotbof.rest.EndpointResource;
 
 import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
+import java.util.List;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
@@ -24,7 +28,12 @@ import javax.inject.Named;
 @Named("endpointView")
 @ViewScoped
 public class EndpointView {
+   private static INotificationService notificationService;
    private Endpoint endpoint;
+
+   static void setNotificationService(INotificationService notificationService) {
+      EndpointView.notificationService = notificationService;
+   }
 
    public EndpointView() {
    }
@@ -38,6 +47,24 @@ public class EndpointView {
 
    public void setEndpoint(Endpoint endpoint) {
       this.endpoint = endpoint;
+   }
+
+   public List<EndpointResource> getResources() {
+      List<EndpointResource> resources = endpoint.getResources();
+      // Try to resolve any async response values
+      if(notificationService != null) {
+         for (EndpointResource resource : resources) {
+            if(resource.hasAsyncValue()) {
+               String asyncID = resource.getValue();
+               String id = AsyncResponseConverter.extractID(asyncID);
+               NspAsyncResponse asyncResponse = notificationService.getAsyncResponse(id);
+               if(asyncResponse != null) {
+                  resource.setResolvedValue(asyncResponse.decodePayload());
+               }
+            }
+         }
+      }
+      return resources;
    }
 
    public String toString() {

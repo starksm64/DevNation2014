@@ -1,4 +1,4 @@
-package org.jboss.devnation.iotbof.events;
+package org.jboss.devnation.iotbof.beans;
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,26 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
-import java.util.Collection;
+import org.jboss.devnation.iotbof.events.INotificationService;
+import org.jboss.devnation.iotbof.events.NspAsyncResponse;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
-public interface INotificationService {
-   /**
-    *
-    * @return
-    */
-   public Collection<NspAsyncResponse> getAllAsyncResponses();
-   /**
-    * Obtain the async response for the given id
-    * @param id the id of the async response as provided by the NSP server
-    * @return the response if found, null otherwise
-    */
-   public NspAsyncResponse getAsyncResponse(String id);
+@ManagedBean
+@RequestScoped
+public class NotificationServiceView {
+   @Inject
+   private INotificationService notificationService;
+
+   public List<NspAsyncResponse> getAllResponses() {
+      ArrayList<NspAsyncResponse> all = new ArrayList<>(notificationService.getAllAsyncResponses());
+      return all;
+   }
 }

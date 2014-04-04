@@ -46,9 +46,21 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <!-- Richfaces -->
         <org.richfaces.bom.version>4.2.2.Final</org.richfaces.bom.version>
+        <!-- The host where you are running the wildfly server for the NSPViewer application -->
+        <wildfly.host>dmz.starkinternational.com</wildfly.host>
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+            <!-- WildFly plugin to deploy ear -->
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
+            </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -69,11 +81,13 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
-                    <jboss-home>${wildfly.home}</jboss-home>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
+
     <dependencyManagement>
         <dependencies>
             <!-- Define the version of the EJB jar so that we don't need
@@ -204,5 +218,46 @@
             <version>3.1.4.GA</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-core-impl</artifactId>
+            <version>2.1.0.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-weld</artifactId>
+            <version>${version.wildfly}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+                <id>run</id>
+                <activation>
+                    <file>
+                        <exists>${project.artifactId}.ear</exists>
+                    </file>
+                </activation>
+            <build>
+                <plugins>
+                    <!-- WildFly plugin to deploy ear -->
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>${version.wildfly.maven.plugin}</version>
+                        <configuration>
+                            <jboss-home>${wildfly.home}</jboss-home>
+                            <filename>${project.artifactId}.ear</filename>
+                            <skip>false</skip>
+                            <!-- For debugging
+                            <jvm-args>-agentlib:jdwp=transport=dt_socket,address=8999,server=y,suspend=n -Xms64m -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true</jvm-args>
+                            -->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

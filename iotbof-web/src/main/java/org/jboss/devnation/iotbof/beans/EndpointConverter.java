@@ -25,6 +25,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
+ * Map from the endpoint name to the Endpoint object
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
 @FacesConverter("EndpointConverter")

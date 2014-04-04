@@ -7,18 +7,17 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+    <title>NSPView Application</title>
 </h:head>
 <h:body>
     <f:metadata>
         <!--
-        <f:event type="postValidate" listener="#{nspmodel.enableCallbacks}" />
+        <f:event type="postValidate" listener="#{nspmodel.enableNotifications}" />
         -->
     </f:metadata>
-    <p:progressBar value="#{nspmodel.progress}" ajax="true" interval="500">
-    	 <p:ajax event="complete" listener="#{nspmodel.onComplete}" />
-     </p:progressBar>
 
-    <h:form>
+    <h:form id="endpointForm">
+        <p:log id="plog" rendered="#{nspmodel.showLog}" widgetVar="plogDlog"/>
         <p:panel id="panel" header="NSP Endpoints">
             <p:dataTable id="endpointsTable" value="#{nspmodel.endpoints}" var="ep">
                 <f:facet name="header">
@@ -39,21 +38,51 @@
                     In total there are #{nspmodel.endpointsSize} endpoints.
                 </f:facet>
             </p:dataTable>
-            <p:commandButton value="Refresh Endpoints" update="panel" actionListener="#{nspmodel.reload}"/>
-            <p:commandButton value="Enable Notifications" actionListener="#{nspmodel.enableCallbacks}"/>
-        </p:panel>
-        <p:panel id="appMessages" header="Messages" toggleable="true" toggleSpeed="500" widgetVar="msgPanel">
-            <p:messages id="messages" />
-                <f:facet name="options">
-                    <p:menu>
-                        <p:submenu label="Settings">
-                            <p:menuitem value="Toggle" url="#" icon="ui-icon-newwin" onclick="msgPanel.toggle()"/>
-                        </p:submenu>
-                    </p:menu>
-                </f:facet>
+            <p:commandButton value="Refresh Endpoints" update="panel" actionListener="#{nspmodel.reload}"
+                    onclick="PF('ajaxProgress').start();"/>
+            <p:commandButton value="Enable Notifications" actionListener="#{nspmodel.enableNotifications}"
+                             disabled="#{nspmodel.notificationsEnabled}" update="endpointForm" />
+            <p:commandButton value="Show Debug Log" actionListener="#{nspmodel.toggleShowLog}"
+                             rendered="#{!nspmodel.showLog}" update="endpointForm"/>
+            <p:commandButton value="Hide Debug Log" actionListener="#{nspmodel.toggleShowLog}"
+                             rendered="#{nspmodel.showLog}" update="endpointForm" onclick="plogDlog.hide()"/>
         </p:panel>
     </h:form>
     <p:separator />
+    <h:form>
+    <p:panel id="appMessages" header="Messages" toggleable="true" toggleSpeed="2000" widgetVar="appMsgPanel">
+        <p:messages id="amessages" autoUpdate="true" showDetail="true" />
+            <f:facet name="options">
+                <p:menu>
+                    <p:submenu label="Settings">
+                        <p:menuitem value="Toggle" url="#" icon="ui-icon-newwin" onclick="appMsgPanel.toggle()"/>
+                    </p:submenu>
+                </p:menu>
+            </f:facet>
+    </p:panel>
+        <p:panel id="progressMessages" header="ProgressMessages" toggleable="true" toggleSpeed="2000" widgetVar="progressMsgPanel">
+            <p:dialog header="Progress Log Details" resizable="true" widgetVar="progressDlog">
+            <p:scrollPanel style="width:700px;height:200px">
+                <p:dataList value="#{nspmodel.progressMessages}" var="msg">
+                    #{msg}
+                </p:dataList>
+            </p:scrollPanel>
+            </p:dialog>
+            <p:commandButton value="Show" type="button" onclick="PF('progressDlog').show()" />
+            <p:commandButton value="Hide" type="button" onclick="PF('progressDlog').hide()" />
+                <f:facet name="options">
+                    <p:menu>
+                        <p:submenu label="Settings">
+                            <p:menuitem value="Toggle" url="#" icon="ui-icon-newwin" onclick="progressMsgPanel.toggle()"/>
+                        </p:submenu>
+                    </p:menu>
+                </f:facet>
+            <p:progressBar widgetVar="ajaxProgress" ajax="true" value="#{nspmodel.progress}" labelTemplate="{value}%"
+                           interval="500" styleClass="animated">
+                <p:ajax event="complete" listener="#{nspmodel.onComplete}" update="progressMessages" />
+            </p:progressBar>
+        </p:panel>
+    </h:form>
     <h:outputText value="#{nspmodel.connectionStatus}"/>
 </h:body>
 

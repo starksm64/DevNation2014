@@ -37,11 +37,20 @@ public class AsyncResponseConverter implements Converter {
       AsyncResponseConverter.notificationService = service;
    }
 
-   @Override
-   public Object getAsObject(FacesContext context, UIComponent component, String value) {
-      // Extract the id portion {"async-response-id":"54696#mbed-ethernet-1DE41@domain/3/0/2"}
+   /**
+    * Extract the id portion {"async-response-id":"54696#mbed-ethernet-1DE41@domain/3/0/2"}
+    * @param value
+    * @return
+    */
+   static String extractID(String value) {
       String[] parts = value.split("\"");
       String id = parts[3];
+      return id;
+   }
+
+   @Override
+   public Object getAsObject(FacesContext context, UIComponent component, String value) {
+      String id = extractID(value);
 
       logger.infof("getAsObject, value=%s, id=%s\n", value, id);
       NspAsyncResponse response = notificationService.getAsyncResponse(id);

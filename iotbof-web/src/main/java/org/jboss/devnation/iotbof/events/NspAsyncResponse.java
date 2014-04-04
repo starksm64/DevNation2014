@@ -59,8 +59,11 @@ public class NspAsyncResponse {
     * @return
     */
    public String decodePayload() {
-      byte[] frombase64 = DatatypeConverter.parseBase64Binary(payload);
-      return new String(frombase64);
+      if(payload != null) {
+         byte[] frombase64 = DatatypeConverter.parseBase64Binary(payload);
+         return new String(frombase64);
+      }
+      return null;
    }
 
    public String getPayload() {

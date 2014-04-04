@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>iotbof</artifactId>
+        <groupId>org.jboss.devnation</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>scripts</artifactId>
+    <packaging>pom</packaging>
+    <name>IoT BOF JNDI Configuration</name>
+
+    <build>
+      <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!-- WildFly plugin to configure JNDI bindings -->
+            <plugin>
+                   <groupId>org.wildfly.plugins</groupId>
+                   <artifactId>wildfly-maven-plugin</artifactId>
+                   <version>${version.wildfly.maven.plugin}</version>
+                   <configuration>
+                       <jboss-home>${wildfly.home}</jboss-home>
+                       <execute-commands>
+                           <commands>
+                               <command>/subsystem=naming/binding=java\:global\/NSPDomain:add(binding-type=simple,type=java.lang.String,value=domain)</command>
+                               <command>/subsystem=naming/binding=java\:global\/NSPURL:add(binding-type=simple,type=java.lang.String,value=http://red-hat-summit.cloudapp.net:8080/)</command>
+                               <command>/subsystem=naming/binding=java\:global\/NotificationCallbackURL:add(binding-type=simple,type=java.net.URL,value=http://${wildfly.host}:${jboss.http.port:8080})</command>
+                               <command>/subsystem=naming:jndi-view</command>
+                           </commands>
+                       </execute-commands>
+                   </configuration>
+               </plugin>
+
+        </plugins>
+    </build>
+</project>

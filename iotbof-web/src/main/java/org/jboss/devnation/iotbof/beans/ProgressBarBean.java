@@ -12,7 +12,9 @@ package org.jboss.devnation.iotbof.beans;/*
  * limitations under the License.
  */
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
@@ -22,6 +24,7 @@ public class ProgressBarBean {
    private boolean enabled = false;
    private Long startTime;
    private int current;
+   private ArrayList<String> messages = new ArrayList<>();
 
    public ProgressBarBean() {
    }
@@ -30,6 +33,7 @@ public class ProgressBarBean {
       setEnabled(true);
       setButtonRendered(false);
       setStartTime(new Date().getTime());
+      messages.clear();
       return null;
    }
 
@@ -39,12 +43,19 @@ public class ProgressBarBean {
       }
 
       if (startTime == null) {
-         return -1;
+         return 0;
       }
-      return 101;
+      return 100;
    }
    public void setCurrent(int current) {
       this.current = current;
+   }
+
+   public void addMessage(String msg) {
+      messages.add(msg);
+   }
+   public List<String> getMessages() {
+      return messages;
    }
 
    public boolean isEnabled() {

@@ -17,8 +17,13 @@
     </f:metadata>
     <ui:debug hotkey="x" rendered="#{facesContext.application.projectStage == 'Development'}" />
 
+    <h:form>
+        <p:breadCrumb id="bcMenu">
+            <p:menuitem id="endpointsMenuItem" value="Endpoints" outcome="index"/>
+        </p:breadCrumb>
+    </h:form>
     <p:panel id="panel" header="Endpoint Detail: #{endpointView.endpoint.name}">
-        <p:dataTable id="resTable" value="#{endpointView.endpoint.resources}" var="res">
+        <p:dataTable id="resTable" value="#{endpointView.resources}" var="res">
             <f:facet name="header">
                 <h:outputText value="Resources"/>
             </f:facet>
@@ -48,10 +53,9 @@
                 <h:outputText value="#{res.obs}" />
             </p:column>
             <f:facet name="footer">
-                In total there are #{endpointView.endpoint.resources.size()} resources.
+                In total there are #{endpointView.resources.size()} resources.
             </f:facet>
         </p:dataTable>
-        <h:link value="Return to Endpoints" outcome="index"/>
     </p:panel>
     <p:messages id="messages" autoUpdate="true"/>
 </h:body>

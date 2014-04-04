@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Debug Views</title>
+</h:head>
+<h:body>
+
+    <h:form>
+        <p:breadCrumb id="bcMenu">
+            <p:menuitem id="endpointsMenuItem" value="Endpoints" outcome="index"/>
+        </p:breadCrumb>
+    </h:form>
+    <p:panel id="panel" header="Dump All AsyncResponses">
+        <p:dataTable id="resTable" value="#{notificationServiceView.allResponses}" var="res">
+            <f:facet name="header">
+                <h:outputText value="Resources"/>
+            </f:facet>
+
+            <p:column headerText="ID">
+                <h:outputText value="#{res.id}"/>
+            </p:column>
+            <p:column headerText="Status">
+                <h:outputText value="#{res.status}"/>
+            </p:column>
+            <p:column headerText="RawValue">
+                <h:outputText value="#{res.payload}" />
+            </p:column>
+            <p:column headerText="DecodedValue">
+                <h:outputText value="#{res.decodePayload()}" />
+            </p:column>
+            <f:facet name="footer">
+                In total there are #{notificationServiceView.allResponses.size()} responses.
+            </f:facet>
+        </p:dataTable>
+    </p:panel>
+    <p:messages id="messages" autoUpdate="true"/>
+</h:body>
+
+</html>

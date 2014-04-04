@@ -60,7 +60,7 @@ We need the JBoss Java EE7 server implementation for this BOF. Here we describe 
 ## Wildfly Configuration
 There are a few @Resource injections from JNDI that need to be configured in the wildfly server configuration to specify the correct locations for the NSP server, it's domain, and the location of the iotbof-web project NspNotificationService. The configuration file that needs to be edited is $JBOSS_HOME/standalone/configuration/standalone.xml.
 
-Pull this file into an editor, and search for the subsystem xmlns="urn:jboss:domain:naming:2.0" section. Add a bindings section as shown below:
+You can either pull the standalone.xml file into an editor, and search for the subsystem xmlns="urn:jboss:domain:naming:2.0" section. Add a bindings section as shown below:
 
     <subsystem xmlns="urn:jboss:domain:naming:2.0">
        <bindings>
@@ -75,10 +75,16 @@ Pull this file into an editor, and search for the subsystem xmlns="urn:jboss:dom
 * The java:global/NSPURL provides the base URL for the NSP REST interface
 * The java:global/NotificationCallbackURL binding provides the URL for the NspNotificationService REST endpoint. You will need to change the responsehost:port value to the ipaddress and port where you are running the Wildfly server.
 
+or you can edit the
+
 ## Building the Project
 To build the project and bring up the NSPViewer application running under Wildfly, perform the following steps:
 1. git clone https://github.com/starksm64/DevNation2014.git to create the DevNation2014 repository
 2. cd DevNation2014
 3. Build the project by running mvn install
-4. Run the application by running mvn wildfly:run
+4. Run the application by running mvn -DskipTests=true wildfly:run
 
+## Trouble Shooting
+
+Check the JNDI namespace of the server by running
+${WILDFLY_HOME}/bin/jboss-cli.sh -c --command=/subsystem=naming:jndi-view
