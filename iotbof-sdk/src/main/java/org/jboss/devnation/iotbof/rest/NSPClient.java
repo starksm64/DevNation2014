@@ -126,9 +126,9 @@ public class NSPClient {
 
       ResteasyClientBuilder rsb = new ResteasyClientBuilder();
       Client rsc = rsb.build();
-      WebTarget target = rsc.target(BASEURL+"/"+domain+"/endpoints/"+endpoint+resourcePath);
-      target.queryParam("sync", sync);
-      target.queryParam("cacheOnly", cacheOnly);
+      WebTarget target = rsc.target(BASEURL+"/"+domain+"/endpoints/"+endpoint+resourcePath)
+         .queryParam("sync", sync)
+         .queryParam("cacheOnly", cacheOnly);
 
       if(basicAuth != null)
          target.register(basicAuth);
