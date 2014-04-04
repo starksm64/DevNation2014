@@ -18,6 +18,7 @@ import org.jboss.devnation.iotbof.rest.Endpoint;
 import org.jboss.devnation.iotbof.rest.EndpointResource;
 import org.jboss.devnation.iotbof.rest.INSP;
 import org.jboss.devnation.iotbof.rest.NSPClient;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.Invocation;
@@ -53,7 +54,30 @@ public class TestNspClient {
       }
    }
 
+   /**
+    * Query a value that returns an async-response-id and try requerying with the sync=true flag.
+    * This test is ignored as it relies on a fixed endpoint that does not exist in general.
+    * @throws Exception
+    */
    @Test
+   @Ignore("relies on mbed-ethernet-1DE41 endpoint")
+   public void queryEndpointResourceAsyncValue() throws Exception {
+      System.out.printf("Testing for query of value with an async return\n");
+      String name = "mbed-ethernet-1DE41";
+      String dimmerURI = "/311/0/5851";
+      NSPClient.setBasicAuthentication("admin", "secret");
+
+      String dimmer = NSPClient.queryEndpointResourceValue("domain", name, dimmerURI, false, false);
+      System.out.printf("Dimmer value:%s\n", dimmer);
+      if(dimmer.contains("async-response-id")) {
+         System.out.printf("Requerying with sync=true\n", dimmer);
+         dimmer = NSPClient.queryEndpointResourceValue("domain", name, dimmerURI, true, false);
+         System.out.printf("Dimmer value:%s\n", dimmer);
+      }
+   }
+
+   @Test
+   @Ignore("relies on mbed-ethernet-1DE41 endpoint")
    public void queryMbedTemperature() {
       NSPClient.setBasicAuthentication("admin", "secret");
       String temp = NSPClient.queryEndpointResourceValue("domain", "mbed-ethernet-1DE41", "/303/0/5700", false, false);
