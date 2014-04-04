@@ -41,6 +41,7 @@ public class WeldProducerMethods {
    public INSP getNSPImplementation() {
       logger.infof("nspURL=%s\n", nspURL);
       NSPClient.setBasicAuthentication("admin", "secret");
+      NSPClient.setBaseURL(nspURL);
       INSP impl = NSPClient.buildINSPProxy(nspURL);
       return impl;
    }
