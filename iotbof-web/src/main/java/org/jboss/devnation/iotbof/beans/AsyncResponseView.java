@@ -13,7 +13,9 @@ package org.jboss.devnation.iotbof.beans;
  * limitations under the License.
  */
 
+import org.jboss.devnation.iotbof.events.AsyncID;
 import org.jboss.devnation.iotbof.events.NspAsyncResponse;
+import org.jboss.devnation.iotbof.rest.EndpointResource;
 
 import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
@@ -24,22 +26,29 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class AsyncResponseView {
-   private String endpointName;
+   private AsyncID asyncID;
+   /** Set if the response is found */
    private NspAsyncResponse response;
+   /** Set if the response is not found and resource value was reloaded */
+   private EndpointResource resource;
 
    public AsyncResponseView() {
    }
-   public AsyncResponseView(String endpointName, NspAsyncResponse response) {
-      this.endpointName = endpointName;
+   public AsyncResponseView(AsyncID asyncID, EndpointResource resource) {
+      this.asyncID = asyncID;
+      this.resource = resource;
+   }
+   public AsyncResponseView(AsyncID asyncID, NspAsyncResponse response) {
+      this.asyncID = asyncID;
       this.response = response;
    }
 
-   public String getEndpointName() {
-      return endpointName;
+   public AsyncID getAsyncID() {
+      return asyncID;
    }
 
-   public void setEndpointName(String endpointName) {
-      this.endpointName = endpointName;
+   public void setAsyncID(AsyncID asyncID) {
+      this.asyncID = asyncID;
    }
 
    public NspAsyncResponse getResponse() {
@@ -48,5 +57,13 @@ public class AsyncResponseView {
 
    public void setResponse(NspAsyncResponse response) {
       this.response = response;
+   }
+
+   public EndpointResource getResource() {
+      return resource;
+   }
+
+   public void setResource(EndpointResource resource) {
+      this.resource = resource;
    }
 }

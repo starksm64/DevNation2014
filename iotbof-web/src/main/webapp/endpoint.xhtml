@@ -23,6 +23,7 @@
         </p:breadCrumb>
     </h:form>
     <p:panel id="panel" header="Endpoint Detail: #{endpointView.endpoint.name}">
+        <h:form>
         <p:dataTable id="resTable" value="#{endpointView.resources}" var="res">
             <f:facet name="header">
                 <h:outputText value="Resources"/>
@@ -56,6 +57,7 @@
                 In total there are #{endpointView.resources.size()} resources.
             </f:facet>
         </p:dataTable>
+        </h:form>
     </p:panel>
     <p:messages id="messages" autoUpdate="true"/>
 </h:body>

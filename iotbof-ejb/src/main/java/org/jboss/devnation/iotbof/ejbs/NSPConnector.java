@@ -35,6 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * A singleton ejb that initializes the connections to the NSP and provides
@@ -87,6 +90,7 @@ public class NSPConnector {
 
    @PostConstruct
    public void postConstruct() {
+      // Debugging, dump out the java:global view
       try {
          InitialContext ctx = new InitialContext();
          Context global = (Context) ctx.lookup("java:global");
@@ -166,7 +170,7 @@ public class NSPConnector {
                progress.updateProgress(task, taskCount, msg);
                logger.info(msg);
                try {
-                  String value = NSPClient.queryEndpointResourceValue(domain, name, er.getUri(), false, false);
+                  String value = NSPClient.queryEndpointResourceValue(domain, name, er.getUri(), false, false, 10, TimeUnit.SECONDS);
                   logger.infof("%s(%s)=%s\n", name, er.getUri(), value);
                   er.setValue(value);
                   // Step 3, register for updates
@@ -230,4 +234,24 @@ public class NSPConnector {
       }
       return handler;
    }
+
+   /**
+    * Wrapper around NSPClient call.
+    * @param endpoint
+    * @param resourcePath
+    * @param sync
+    * @param cacheOnly
+    * @return
+    */
+   public String queryEndpointResourceValue(String endpoint, String resourcePath,
+                                            boolean sync, boolean cacheOnly) {
+      String value = null;
+      try {
+         value = NSPClient.queryEndpointResourceValue(domain, endpoint, resourcePath, sync, cacheOnly);
+      } catch (InterruptedException|ExecutionException|TimeoutException e) {
+         logger.errorf(e, "Failed to queryEndpointResourceValue(%s,%s)", endpoint, resourcePath);
+      }
+      return value;
+   }
+
 }

@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 /**
+ * Utility to parse an html doc of the resource types into enum declarations.
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
 public class ParseResourceIDs {

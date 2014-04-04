@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui">
 <!-- Detail page for asynchronous response -->
 <h:head>
-    <title>Async Response Detail: #{asyncResponseView.response.id}</title>
+    <title>Async Response Detail: #{asyncResponseView.asyncID.id}</title>
 </h:head>
 <h:body>
     <f:metadata>
@@ -19,25 +19,38 @@
         <p:breadCrumb>
             <p:menuitem value="Endpoints" outcome="index"/>
             <p:menuitem value="Endpoint" outcome="endpoint" includeViewParams="true">
-                <f:param name="epname" value="#{asyncResponseView.endpointName}" />
+                <f:param name="epname" value="#{asyncResponseView.asyncID.endpointName}"/>
             </p:menuitem>
         </p:breadCrumb>
     </h:form>
-    <p:panelGrid columns="2">
-        <f:facet name="header">
-            Async Response Detail: #{asyncResponseView.response.id}
-        </f:facet>
+    <f:subview id="asyncView" rendered="#{asyncResponseView.response != null}">
+        <p:panelGrid columns="2">
+            <f:facet name="header">
+                Async Response Detail: #{asyncResponseView.asyncID.id}
+            </f:facet>
+            <h:outputLabel value="DecodedValue: "/>
+            <h:outputText value="#{asyncResponseView.response.decodePayload()}"/>
+            <h:outputLabel value="RawValue: "/>
+            <h:outputText value="#{asyncResponseView.response.payload}"/>
+            <h:outputLabel value="Status: "/>
+            <h:outputText value="#{asyncResponseView.response.status}"/>
+            <h:outputLabel value="MaxAge: "/>
+            <h:outputText value="#{asyncResponseView.response.maxAge}"/>
+        </p:panelGrid>
+    </f:subview>
+    <f:subview id="resourceView" rendered="#{asyncResponseView.resource != null}">
+        <p:panelGrid columns="2">
+            <f:facet name="header">
+                Resolved Async Response: #{asyncResponseView.asyncID.id}
+            </f:facet>
+            <h:outputLabel value="DecodedValue: "/>
+            <h:outputText value="#{asyncResponseView.resource.resolvedValue}"/>
+            <h:outputLabel value="RawValue: "/>
+            <h:outputText value="#{asyncResponseView.resource.value}"/>
+        </p:panelGrid>
+    </f:subview>
 
-        <h:outputLabel value="DecodedValue: " />
-        <h:outputText value="#{asyncResponseView.response.decodePayload()}" />
-        <h:outputLabel value="RawValue: " />
-        <h:outputText value="#{asyncResponseView.response.payload}" />
-        <h:outputLabel value="Status: " />
-        <h:outputText value="#{asyncResponseView.response.status}"/>
-        <h:outputLabel value="MaxAge: " />
-        <h:outputText value="#{asyncResponseView.response.maxAge}"/>
-    </p:panelGrid>
-    <p:separator />
-    <p:messages />
+    <p:separator/>
+    <p:messages/>
 </h:body>
 </html>

@@ -13,6 +13,8 @@ package test.org.jboss.devnation.iotbof;
  * limitations under the License.
  */
 
+import org.jboss.devnation.iotbof.events.AsyncID;
+import org.jboss.devnation.iotbof.events.AsyncID.IDParts;
 import org.jboss.devnation.iotbof.events.NspAsyncResponse;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,7 +36,7 @@ public class TestAsyncResponse {
       NspAsyncResponse response = new NspAsyncResponse();
       response.setId("54696#mbed-ethernet-1DE41@domain/3/0/2");
       String[] parts = response.getIdParts();
-      for(NspAsyncResponse.IDParts p : NspAsyncResponse.IDParts.values()) {
+      for(IDParts p : AsyncID.IDParts.values()) {
          System.out.printf("%s = %s\n", p.name(), parts[p.ordinal()]);
       }
    }

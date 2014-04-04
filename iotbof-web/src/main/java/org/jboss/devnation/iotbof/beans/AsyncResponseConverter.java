@@ -12,18 +12,18 @@ package org.jboss.devnation.iotbof.beans;/*
  * limitations under the License.
  */
 
+import org.jboss.devnation.iotbof.ejbs.NSPConnector;
+import org.jboss.devnation.iotbof.events.AsyncID;
 import org.jboss.devnation.iotbof.events.INotificationService;
 import org.jboss.devnation.iotbof.events.NspAsyncResponse;
+import org.jboss.devnation.iotbof.rest.Endpoint;
+import org.jboss.devnation.iotbof.rest.EndpointResource;
 import org.jboss.logging.Logger;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
-
-import static org.jboss.devnation.iotbof.events.NspAsyncResponse.IDParts.EndpointName;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
@@ -31,8 +31,12 @@ import static org.jboss.devnation.iotbof.events.NspAsyncResponse.IDParts.Endpoin
 @FacesConverter("AsyncResponseConverter")
 public class AsyncResponseConverter implements Converter {
    private static Logger logger = Logger.getLogger(AsyncResponseConverter.class);
+   private static NSPConnector nspConnector;
    private static INotificationService notificationService;
 
+   static void setConnector(NSPConnector nspConnector) {
+      AsyncResponseConverter.nspConnector = nspConnector;
+   }
    static void setNotificationService(INotificationService service) {
       AsyncResponseConverter.notificationService = service;
    }
@@ -51,25 +55,24 @@ public class AsyncResponseConverter implements Converter {
    @Override
    public Object getAsObject(FacesContext context, UIComponent component, String value) {
       String id = extractID(value);
-
-      logger.infof("getAsObject, value=%s, id=%s\n", value, id);
+      AsyncID asyncID = new AsyncID(id);
+      logger.infof("getAsObject, value=%s, asyncID=%s\n", value, asyncID);
       NspAsyncResponse response = notificationService.getAsyncResponse(id);
+      String endpointName = asyncID.getEndpointName();
+      AsyncResponseView responseView;
       if(response == null) {
-         FacesMessage fm = new FacesMessage();
-         fm.setDetail("Failed to lookup AsyncResponse for: " + value);
-         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
-         throw new ConverterException(fm);
+         logger.infof("Failed, requesting resource value...\n");
+         String resURI = asyncID.getURI();
+         Endpoint endpoint = nspConnector.getEndpoint(endpointName);
+         String rvalue = nspConnector.queryEndpointResourceValue(endpointName, resURI, true, false);
+         EndpointResource resource = endpoint.getResource(resURI);
+         resource.setResolvedValue(rvalue);
+         responseView = new AsyncResponseView(asyncID, resource);
       }
-      // Extract the endpoint name from the response id
-      String[] idparts = response.getIdParts();
-      if(idparts == null) {
-         FacesMessage fm = new FacesMessage();
-         fm.setDetail("Unable to parse async-response-id into (\\d+)#([^@]+)@.*: " + value);
-         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
-         throw new ConverterException(fm);
+      else {
+         responseView = new AsyncResponseView(asyncID, response);
       }
-      String endpointName = idparts[EndpointName.ordinal()];
-      return new AsyncResponseView(endpointName, response);
+      return responseView;
    }
 
    @Override
@@ -79,6 +82,6 @@ public class AsyncResponseConverter implements Converter {
          return null;
 
       AsyncResponseView view = AsyncResponseView.class.cast(value);
-      return view.getResponse().getId();
+      return view.getAsyncID().getId();
    }
 }

@@ -15,9 +15,9 @@ package org.jboss.devnation.iotbof.beans;
 
 import org.jboss.devnation.iotbof.ejbs.IProgress;
 import org.jboss.devnation.iotbof.ejbs.NSPConnector;
+import org.jboss.devnation.iotbof.events.AsyncID;
 import org.jboss.devnation.iotbof.events.INotificationService;
 import org.jboss.devnation.iotbof.events.NspAsyncResponse;
-import org.jboss.devnation.iotbof.events.NspAsyncResponse.IDParts;
 import org.jboss.devnation.iotbof.events.NspNotificationMsg;
 import org.jboss.devnation.iotbof.rest.Endpoint;
 import org.jboss.logging.Logger;
@@ -60,7 +60,9 @@ public class NSPModel implements IProgress {
       // Initialize the EndpointConverter, AsyncResponseConverter
       EndpointConverter.setConnector(nspConnector);
       AsyncResponseConverter.setNotificationService(notificationService);
+      AsyncResponseConverter.setConnector(nspConnector);
       EndpointView.setNotificationService(notificationService);
+      EndpointView.setConnector(nspConnector);
       // See if notifications are enabled
       try {
          String handler = nspConnector.getNotificationHandler();
@@ -171,8 +173,8 @@ public class NSPModel implements IProgress {
       FacesContext context = FacesContext.getCurrentInstance();
       if(context != null) {
          String[] idParts = msg.getIdParts();
-         String epname = idParts[IDParts.EndpointName.ordinal()];
-         String uri = idParts[IDParts.URI.ordinal()];
+         String epname = idParts[AsyncID.IDParts.EndpointName.ordinal()];
+         String uri = idParts[AsyncID.IDParts.URI.ordinal()];
          String detail = String.format("Updated %s, %s, status=%s", epname, uri, msg.getStatus());
          FacesMessage fmsg = new FacesMessage(msg.getId(), detail);
          fmsg.setSeverity(FacesMessage.SEVERITY_INFO);

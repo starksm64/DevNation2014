@@ -35,16 +35,32 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
 public class NSPClient {
 
+   /**
+    * The URL of the NSP rest interface
+    */
    private static String BASEURL = "http://red-hat-summit.cloudapp.net:8080/";
+   /**
+    * The path relative to BASEURL for registering notification callbacks
+    */
    private static final String NOTIFICATION_PUSH_URL = "/notification/push-url";
+   /**
+    * The authentication information to use
+    */
    private static BasicAuthentication basicAuth;
 
+   /**
+    * A debugging filter
+    */
    public static class ClientLoggingFilter
             implements ClientRequestFilter, ClientResponseFilter {
       @Override
@@ -122,7 +138,17 @@ public class NSPClient {
                                        @PathParam("endpoint") String endpoint,
                                        @PathParam("resourcePath") String resourcePath,
                                        @DefaultValue("false") @QueryParam("sync") boolean sync,
-                                       @DefaultValue("false") @QueryParam("cacheOnly") boolean cacheOnly) {
+                                       @DefaultValue("false") @QueryParam("cacheOnly") boolean cacheOnly)
+         throws InterruptedException, ExecutionException, TimeoutException {
+      return queryEndpointResourceValue(domain, endpoint, resourcePath, sync, cacheOnly, 1, TimeUnit.MINUTES);
+   }
+   public static String queryEndpointResourceValue(@PathParam("domain") String domain,
+                                       @PathParam("endpoint") String endpoint,
+                                       @PathParam("resourcePath") String resourcePath,
+                                       @DefaultValue("false") @QueryParam("sync") boolean sync,
+                                       @DefaultValue("false") @QueryParam("cacheOnly") boolean cacheOnly,
+                                       int timeout, TimeUnit unit)
+         throws InterruptedException, ExecutionException, TimeoutException {
 
       ResteasyClientBuilder rsb = new ResteasyClientBuilder();
       Client rsc = rsb.build();
@@ -133,8 +159,8 @@ public class NSPClient {
       if(basicAuth != null)
          target.register(basicAuth);
       target.register(new ClientLoggingFilter());
-      String value = target.request().get(String.class);
-
+      Future<String> future = target.request().async().get(String.class);
+      String value = future.get(timeout, unit);
       return value;
    }
    @Path("/{domain}/endpoints/{endpoint}{resourcePath}")
