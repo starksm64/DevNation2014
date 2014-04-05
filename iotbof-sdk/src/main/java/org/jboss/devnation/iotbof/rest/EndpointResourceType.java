@@ -62,11 +62,31 @@ public class EndpointResourceType {
                case ConnectivityMonitoring:
                   resID = ConnectivityMonitoringResourceType.valueOf(resid);
                   break;
+               case IPSOSetPoint:
+                  break;
+               // TODO
                case Firmware:
-                  break;
                case Location:
-                  break;
                case ConnectivityStatistics:
+               case IPSO_START:
+               case IPSODigitalInput:
+               case IPSODigitalOutput:
+               case IPSOAnalogueInput:
+               case IPSOAnalogueOutput:
+               case IPSOGenericSensor:
+               case IPSOLuminositySensor:
+               case IPSOPresenceSensor:
+               case IPSOTemperatureSensor:
+               case IPSOHumiditySensor:
+               case IPSOPowerMeasurement:
+               case IPSOActuator:
+               case IPSOFrenchTICInfo:
+               case IPSOLoadControl:
+               case IPSOLightControl:
+               case IPSOPowerControl:
+               case IPSOAccelerometer:
+               default:
+                  resID = ResourceID.Unknown;
                   break;
             }
          }
