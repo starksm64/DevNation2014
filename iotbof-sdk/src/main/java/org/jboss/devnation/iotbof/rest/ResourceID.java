@@ -1197,6 +1197,7 @@ package org.jboss.devnation.iotbof.rest;/*
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
 public enum ResourceID implements IResourceType {
+   Colour(0, "R,W,E", "String", "", "Defined by 5701(Units) resource", "Colour of the object"),
    DigitalInputState(5500,"R","Boolean","","","The current state of a digital input."),
   	DigitalInputCounter(5501,"R","Integer","","","The cumulative value of active state detected."),
   	DigitalInputPolarity(5502,"R,W","Boolean","","","The polarity of a digital input as a Boolean (0 = Normal, 1= Reversed)"),
@@ -1239,7 +1240,8 @@ public enum ResourceID implements IResourceType {
   	SetPointValue(5900,"R,W","Decimal","","Defined by “Units” resource.","The setpoint value."),
   	BusyToClearDelay(5903,"R,W","Integer","","ms","Delay from the detection state to the clear state in ms"),
   	ClearToBusyDelay(5904,"R,W","Integer","","ms","Delay from the clear state to the busy state in ms"),
-   
+
+   Unknown(-1, "", "", "", "", "A resource type that is not currently mapped, probably due to incomplete code")
    ;
 
    ResourceID(int id, String accessType, String type, String range, String units, String description) {
@@ -1287,8 +1289,11 @@ public enum ResourceID implements IResourceType {
    private String description;
 
    public static ResourceID valueOf(int id) {
-  		ResourceID resID = null;
+  		ResourceID resID = Unknown;
   		switch(id) {
+         case 0:
+            resID = ResourceID.Colour;
+            break;
   			case 5500:
   				resID = ResourceID.DigitalInputState;
   			break;
