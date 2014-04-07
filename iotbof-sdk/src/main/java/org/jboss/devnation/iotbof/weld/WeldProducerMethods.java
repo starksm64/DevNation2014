@@ -31,6 +31,10 @@ public class WeldProducerMethods {
 
    @Resource(lookup="java:global/NSPURL")
   	private String nspURL;
+   @Resource(lookup="java:global/NSPUsername")
+  	private String nspUsername;
+   @Resource(lookup="java:global/NSPPassword")
+  	private String nspPassword;
 
    /**
     * A weld producer method for the INSP interface that uses the nspURL as the server location for the
@@ -40,7 +44,7 @@ public class WeldProducerMethods {
    @Produces
    public INSP getNSPImplementation() {
       logger.infof("nspURL=%s\n", nspURL);
-      NSPClient.setBasicAuthentication("admin", "secret");
+      NSPClient.setBasicAuthentication(nspUsername, nspPassword);
       NSPClient.setBaseURL(nspURL);
       INSP impl = NSPClient.buildINSPProxy(nspURL);
       return impl;

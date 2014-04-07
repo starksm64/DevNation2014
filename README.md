@@ -55,45 +55,43 @@ You will need a Java SE 7 JDK instllation, and Maven 3+ in order to build and ru
 We need the JBoss Java EE7 server implementation for this BOF. Here we describe how to download and configure the server.
 
 * Download the EE7 release of Wildfly from [8.0.0.Final Download](http://download.jboss.org/wildfly/8.0.0.Final/wildfly-8.0.0.Final.zip)
-* Unzip the the release to create a wildfly-8.0.0.Final directory that will be referred to as JBOSS_HOME
+* Unzip the the release to create a wildfly-8.0.0.Final directory that will be referred to as wildfly.home
 
 ## Wildfly Configuration
-There are a few @Resource injections from JNDI that need to be configured in the wildfly server configuration to specify the correct locations for the NSP server, it's domain, and the location of the iotbof-web project NspNotificationService. The configuration file that needs to be edited is $JBOSS_HOME/standalone/configuration/standalone.xml.
+There are a few @Resource injections from JNDI that need to be configured in the wildfly server configuration to specify the correct locations for the NSP server, it's domain, and the location of the iotbof-web project NspNotificationService. The configuration file that needs to be edited is iotbof/scripts/pom.xml.
 
-You can either pull the standalone.xml file into an editor, and search for the subsystem xmlns="urn:jboss:domain:naming:2.0" section. Add a bindings section as shown below:
+Pull the pom.xml file into an editor, and edit the properties section shown here:
 
-    <subsystem xmlns="urn:jboss:domain:naming:2.0">
-       <bindings>
-          <simple name="java:global/NSPDomain" value="domain" type="java.lang.String"/>
-          <simple name="java:global/NSPURL" value="http://red-hat-summit.cloudapp.net:8081/" type="java.net.URL"/>
-          <simple name="java:global/NotificationCallbackURL" value="http://reponsehost:port/iotweb-war/events/send" type="java.net.URL"/>
-       </bindings>
-       <remote-naming/>
-    </subsystem>
+    <properties>
+        <NSPDomain>domain</NSPDomain>
+        <NSPURL>http://red-hat-summit.cloudapp.net:8080/</NSPURL>
+        <NSPUsername>admin</NSPUsername>
+        <NSPPassword>secret</NSPPassword>
+    </properties>
 
-* The java:global/NSPDomain binding provides the domain name on the NSP server for the sensors.
-* The java:global/NSPURL provides the base URL for the NSP REST interface
-* The java:global/NotificationCallbackURL binding provides the URL for the NspNotificationService REST endpoint. You will need to change the responsehost:port value to the ipaddress and port where you are running the Wildfly server.
-
-or you can edit the
+* The NSPDomain binding provides the domain name on the NSP server for the sensors.
+* The NSPURL provides the base URL for the NSP REST interface
+* The NSPUsername is the username used to login to the NSP server. You will be given one for your group.
+* The NSPPassword is the password used to login to the NSP server. You will be given one for your group.
 
 ## Building the Project
 To build the project and bring up the NSPViewer application running under Wildfly, perform the following steps:
 
 1. wget http://download.jboss.org/wildfly/8.0.0.Final/wildfly-8.0.0.Final.zip
-    1. unzip wildfly-8.0.0.Final.zip
+    1. `unzip wildfly-8.0.0.Final.zip`
     2. Note the path to the wildfly-8.0.0.Final directory as it will be used a wildfly.home in configurations
-2. git clone https://github.com/starksm64/DevNation2014.git to create the DevNation2014 repository
-3. cd DevNation2014
+2. `git clone https://github.com/starksm64/DevNation2014.git` to create the DevNation2014 repository
+3. `cd DevNation2014`
 4. Set JAVA_HOME if needed
-5. edit the pom.xml and
+5. edit the project root pom.xml and
 	1. set the wildfly.home property to the directory path noted above
-	2. cd into the scripts directory and run mvn wildfly:start wildfly:execute-commands
-6. Build the project by running mvn install
-7. cd iotbof-ear
-8. Run the application by running mvn wildfly:run
+	2. cd into the scripts directory and run `mvn wildfly:start wildfly:execute-commands`
+6. cd back to DevNation2014 and build the project by running `mvn install`
+    1. This runs several tests that will fail if the configuration is not correct. You can try running without the tests by using `mvn -DskipTests=true install`.
+7. `cd iotbof-ear`
+8. Run the application by running `mvn wildfly:run`
 
 ## Trouble Shooting
 
 Check the JNDI namespace of the server by running
-${WILDFLY_HOME}/bin/jboss-cli.sh -c --command=/subsystem=naming:jndi-view
+`${WILDFLY_HOME}/bin/jboss-cli.sh -c --command=/subsystem=naming:jndi-view`
