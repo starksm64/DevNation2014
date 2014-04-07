@@ -52,7 +52,7 @@ You will need a Java SE 7 JDK instllation, and Maven 3+ in order to build and ru
 
 # Wildfly Setup
 -------------------
-We need the JBoss Java EE7 server implementation for this BOF. Here we describe how to download and configure the server.
+We need the JBoss [Wildfly](http://wildfly.org) Java EE7 server implementation for this BOF. Here we describe how to download and configure the server.
 
 * Download the EE7 release of Wildfly from [8.0.0.Final Download](http://download.jboss.org/wildfly/8.0.0.Final/wildfly-8.0.0.Final.zip)
 * Unzip the the release to create a wildfly-8.0.0.Final directory that will be referred to as wildfly.home

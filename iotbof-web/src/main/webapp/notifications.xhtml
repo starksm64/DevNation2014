@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<!-- Display page for the NSP server notifications -->
+<h:head>
+    <title>NSP Server Notifcations</title>
+</h:head>
+<h:body>
+
+    <h:form>
+        <p:breadCrumb id="bcMenu">
+            <p:menuitem id="notificationsMenuItem" value="Notifications" outcome="index"/>
+        </p:breadCrumb>
+    </h:form>
+    <p:panel id="panel" header="Notifications: #{nspmodel.notificationMsgs}">
+        <h:form>
+        <p:dataTable id="msgTable" value="#{nspmodel.notificationMsgs}" var="msg">
+            <f:facet name="header">
+                <h:outputText value="NSP Messages"/>
+            </f:facet>
+
+            <p:dataTable id="regTable" value="#{msg.registrations}" var="reg">
+                <f:facet name="header">
+                    <h:outputText value="NSP Registrations"/>
+                </f:facet>
+                <p:column headerText="Endpoint">
+                    <h:outputText value="#{reg.ep}"/>
+                </p:column>
+                <p:column headerText="EndpointType">
+                    <h:outputText value="#{reg.ept}"/>
+                </p:column>
+                <p:dataTable id="resTable" value="#{reg.resources}" var="res">
+                    <f:facet name="header">
+                        <h:outputText value="Resources"/>
+                    </f:facet>
+
+                    <p:column headerText="URI">
+                        <h:outputText value="#{res.path}"/>
+                    </p:column>
+                    <p:column headerText="Observable">
+                        <h:outputText value="#{res.obs}"/>
+                    </p:column>
+                    <p:column headerText="CT">
+                        <h:outputText value="#{res.ct}"/>
+                    </p:column>
+                    <p:column headerText="RT">
+                        <h:outputText value="#{res.rt}"/>
+                    </p:column>
+                    <p:column headerText="Iface">
+                        <h:outputText value="#{res.iface}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:dataTable>
+
+            <!-- -->
+            <p:dataTable id="reguTable" value="#{msg.registrationUpdates}" var="regu">
+                <f:facet name="header">
+                    <h:outputText value="NSP Registration Updates"/>
+                </f:facet>
+                <p:column headerText="Endpoint">
+                    <h:outputText value="#{reg.ep}"/>
+                </p:column>
+
+            <f:facet name="footer">
+                In total there are #{endpointView.resources.size()} resources.
+            </f:facet>
+        </p:dataTable>
+            <h:outputText value="Automatically Resolve Async Values: " />
+            <p:selectBooleanCheckbox value="#{endpointView.resolveValues}" />
+        </h:form>
+    </p:panel>
+    <p:messages id="messages" autoUpdate="true"/>
+</h:body>
+</html>

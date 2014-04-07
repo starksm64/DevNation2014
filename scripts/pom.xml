@@ -41,7 +41,7 @@
                                <command>/subsystem=naming/binding=java\:global\/NSPUsername:add(binding-type=simple,type=java.lang.String,value=${NSPUsername})</command>
                                <command>/subsystem=naming/binding=java\:global\/NSPPassword:add(binding-type=simple,type=java.lang.String,value=${NSPPassword})</command>
                                <command>/subsystem=naming/binding=java\:global\/NSPURL:add(binding-type=simple,type=java.lang.String,value=${NSPURL})</command>
-                               <command>/subsystem=naming/binding=java\:global\/NotificationCallbackURL:add(binding-type=simple,type=java.net.URL,value=http://${wildfly.host}:${jboss.http.port:8080})</command>
+                               <command>/subsystem=naming/binding=java\:global\/NotificationCallbackURL:add(binding-type=simple,type=java.net.URL,value=http://${wildfly.host}:${jboss.http.port:8080}/iotbof-web/rest/events/send)</command>
                                <command>/subsystem=naming:jndi-view</command>
                            </commands>
                        </execute-commands>

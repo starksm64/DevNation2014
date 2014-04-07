@@ -165,8 +165,13 @@ public class NSPModel implements IProgress {
       return notificationMsgs;
    }
 
+   public void clearNotifications() {
+      notificationMsgs.clear();
+   }
+
    public void receiveNotificationMsg(@Observes NspNotificationMsg msg) {
       logger.infof("receiveNotificationMsg, %s\n", msg);
+      notificationMsgs.add(msg);
    }
    public void receiveAsyncResponse(@Observes NspAsyncResponse msg) {
       logger.infof("receiveAsyncResponse, %s\n", msg.getId());
