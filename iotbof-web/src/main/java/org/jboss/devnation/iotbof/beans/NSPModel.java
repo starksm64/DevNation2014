@@ -18,7 +18,7 @@ import org.jboss.devnation.iotbof.ejbs.NSPConnector;
 import org.jboss.devnation.iotbof.events.AsyncID;
 import org.jboss.devnation.iotbof.events.INotificationService;
 import org.jboss.devnation.iotbof.events.NspAsyncResponse;
-import org.jboss.devnation.iotbof.events.NspNotificationMsg;
+import org.jboss.devnation.iotbof.events.NspNotification;
 import org.jboss.devnation.iotbof.rest.Endpoint;
 import org.jboss.logging.Logger;
 
@@ -49,7 +49,8 @@ public class NSPModel implements IProgress {
    /** */
    private List<Endpoint> endpoints;
    /** */
-   private ArrayList<NspNotificationMsg> notificationMsgs = new ArrayList<>();
+   private ArrayList<NspNotification> notificationMsgs = new ArrayList<>();
+   private ArrayList<NspAsyncResponse> asyncMsgs = new ArrayList<>();
    private ProgressBarBean progressBar = new ProgressBarBean();
    private boolean notificationsEnabled;
    private boolean showLog;
@@ -161,20 +162,27 @@ public class NSPModel implements IProgress {
       int size = endpoints != null ? endpoints.size() : 0;
       return size;
    }
-   public List<NspNotificationMsg> getNotificationMsgs() {
+   public List<NspNotification> getNotificationMsgs() {
       return notificationMsgs;
+   }
+   public List<NspAsyncResponse> getAsyncMsgs() {
+      return asyncMsgs;
    }
 
    public void clearNotifications() {
       notificationMsgs.clear();
    }
+   public void clearAsyncNotifications() {
+      asyncMsgs.clear();
+   }
 
-   public void receiveNotificationMsg(@Observes NspNotificationMsg msg) {
+   public void receiveNotificationMsg(@Observes NspNotification msg) {
       logger.infof("receiveNotificationMsg, %s\n", msg);
       notificationMsgs.add(msg);
    }
    public void receiveAsyncResponse(@Observes NspAsyncResponse msg) {
       logger.infof("receiveAsyncResponse, %s\n", msg.getId());
+      asyncMsgs.add(msg);
       FacesContext context = FacesContext.getCurrentInstance();
       if(context != null) {
          String[] idParts = msg.getIdParts();

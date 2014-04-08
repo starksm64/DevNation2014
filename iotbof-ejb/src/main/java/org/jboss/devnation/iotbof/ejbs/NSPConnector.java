@@ -35,9 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * A singleton ejb that initializes the connections to the NSP and provides
@@ -170,17 +167,20 @@ public class NSPConnector {
                progress.updateProgress(task, taskCount, msg);
                logger.info(msg);
                try {
-                  String value = NSPClient.queryEndpointResourceValue(domain, name, er.getUri(), false, false, 10, TimeUnit.SECONDS);
-                  logger.infof("%s(%s)=%s\n", name, er.getUri(), value);
+                  String value = nspApi.queryEndpointResourceValue(domain, name, er.getUri(), false, false);
+                  logger.infof("%s(%s)=%s, observable=%s\n", name, er.getUri(), value, er.getObs());
                   er.setValue(value);
                   // Step 3, register for updates
-                  if (er.getObs().equalsIgnoreCase("true") && hasNotificationHandler) {
+                  boolean observalbe = er.getObs().equalsIgnoreCase("true");
+                  if (observalbe && hasNotificationHandler) {
                      nspApi.subscribeEndpointResource(domain, name, er.getUri());
                      logger.infof("Requested updates for: %s(%s)", name, er.getUri());
+                  } else if(observalbe) {
+                     logger.warnf("Skipped updates for: %s(%s)", name, er.getUri());
                   }
                } catch (Exception e) {
-                  msg = String.format("Failed to load %s%s resource, err=\n", name, er.getUri(), e.getMessage());
-                  logger.warn(msg);
+                  msg = String.format("Failed to load %s%s resource\n", name, er.getUri());
+                  logger.warn(msg, e);
                }
                task ++;
                progress.updateProgress(task, taskCount, msg);
@@ -228,9 +228,11 @@ public class NSPConnector {
       String handler = null;
       try {
          handler = nspApi.getNotificationHandler("domain");
+         hasNotificationHandler = true;
          System.out.printf("handler: %s\n", handler);
       } catch (NotFoundException e) {
          System.out.printf("No handler registered\n");
+         hasNotificationHandler = false;
       }
       return handler;
    }
@@ -245,12 +247,7 @@ public class NSPConnector {
     */
    public String queryEndpointResourceValue(String endpoint, String resourcePath,
                                             boolean sync, boolean cacheOnly) {
-      String value = null;
-      try {
-         value = NSPClient.queryEndpointResourceValue(domain, endpoint, resourcePath, sync, cacheOnly);
-      } catch (InterruptedException|ExecutionException|TimeoutException e) {
-         logger.errorf(e, "Failed to queryEndpointResourceValue(%s,%s)", endpoint, resourcePath);
-      }
+      String value = nspApi.queryEndpointResourceValue(domain, endpoint, resourcePath, sync, cacheOnly);
       return value;
    }
 

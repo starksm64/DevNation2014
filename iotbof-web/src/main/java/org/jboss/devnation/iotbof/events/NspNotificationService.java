@@ -28,6 +28,7 @@ import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
@@ -36,14 +37,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NspNotificationService implements INotificationService {
    private static final Logger logger = Logger.getLogger(NspNotificationService.class);
    private static ConcurrentHashMap<String, NspAsyncResponse> asyncResponseMap = new ConcurrentHashMap<>();
+   private static AtomicInteger counter = new AtomicInteger(0);
 
    @Inject
-   Event<NspNotificationMsg> notificationMsgEvent;
+   Event<NspNotification> notificationMsgEvent;
    @Inject
    Event<NspAsyncResponse> asyncResponseEvent;
 
    public NspNotificationService() {
-      logger.infof("NspNotificationService.ctor, %s\n", this);
+
    }
 
    @Override
@@ -64,17 +66,26 @@ public class NspNotificationService implements INotificationService {
    @Path("/send")
    @Consumes("application/json")
    public Response handleNotification(NspNotificationMsg msg) {
-      logger.infof("handleNotification: %s\n", msg);
-      notificationMsgEvent.fire(msg);
-      Response response = Response.ok("{}", MediaType.APPLICATION_JSON_TYPE).build();
+      int count = counter.incrementAndGet();
+      logger.infof("Begin handleNotification(%d): %s\n", count, msg);
+      List<NspNotification> notifications = msg.getNotifications();
+      if(notifications != null && notifications.size() > 0) {
+         logger.infof("Sending %d NspNotifications\n", notifications.size());
+         for(NspNotification notify : notifications) {
+            notificationMsgEvent.fire(notify);
+         }
+      }
+      Response response = Response.ok().build();
       List<NspAsyncResponse> asyncResponses = msg.getAsyncResponses();
       if(asyncResponses != null && asyncResponses.size() > 0) {
+         logger.infof("Sending %d NspAsyncResponse\n", asyncResponses.size());
          for (NspAsyncResponse ar : asyncResponses) {
             asyncResponseMap.put(ar.getId(), ar);
             logger.infof("Added AsyncResponse: %s, count=%d", ar.getId(), asyncResponseMap.size());
             asyncResponseEvent.fire(ar);
          }
       }
+      logger.infof("End handleNotification(%d)\n", count);
       return response;
    }
 

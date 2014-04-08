@@ -83,7 +83,22 @@
             </p:progressBar>
         </p:panel>
     </h:form>
-    <h:outputText value="#{nspmodel.connectionStatus}"/>
+    <p:layout style="min-width:400px; min-height:48px;" id="layout">
+        <p:layoutUnit position="west" resizable="true" minSize="200">
+            <h:outputText value="#{nspmodel.connectionStatus}"/>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center">
+            <h:outputText value="Powered by: "/>
+            <h:outputLink  value="#{bundle['wildfly.home']}" >
+            	<h:graphicImage value="/images/wildfly2.jpeg" height="48" />
+            </h:outputLink>
+        </p:layoutUnit>
+        <p:layoutUnit position="east">
+            <p:button outcome="notifications" value="View Notifications(#{nspmodel.notificationMsgs.size()})" />
+        </p:layoutUnit>
+    </p:layout>
+
 </h:body>
 
 </html>

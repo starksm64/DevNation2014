@@ -13,6 +13,9 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
+import org.jboss.devnation.iotbof.events.AsyncID.IDParts;
+import org.jboss.devnation.iotbof.rest.EndpointResourceType;
+
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -60,6 +63,15 @@ public class NspAsyncResponse {
 
    public String getId() {
       return id;
+   }
+   public String getEndpoint() {
+      return getIdParts()[IDParts.EndpointName.ordinal()];
+   }
+   public String getUri() {
+      return getIdParts()[IDParts.URI.ordinal()];
+   }
+   public EndpointResourceType getResourceType() {
+      return new EndpointResourceType(getUri());
    }
 
    public void setId(String id) {

@@ -13,6 +13,7 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -66,6 +67,18 @@ public class NspNotification {
 
    public void setPayload(String payload) {
       this.payload = payload;
+   }
+   /**
+    * Decode the base64 encoded payload
+    * @see javax.xml.bind.DatatypeConverter#parseBase64Binary(String)
+    * @return
+    */
+   public String decodePayload() {
+      if(payload != null) {
+         byte[] frombase64 = DatatypeConverter.parseBase64Binary(payload);
+         return new String(frombase64);
+      }
+      return null;
    }
 
    public String getTimestamp() {

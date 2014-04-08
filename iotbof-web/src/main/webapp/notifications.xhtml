@@ -15,63 +15,48 @@
             <p:menuitem id="notificationsMenuItem" value="Notifications" outcome="index"/>
         </p:breadCrumb>
     </h:form>
-    <p:panel id="panel" header="Notifications: #{nspmodel.notificationMsgs}">
-        <h:form>
-        <p:dataTable id="msgTable" value="#{nspmodel.notificationMsgs}" var="msg">
-            <f:facet name="header">
-                <h:outputText value="NSP Messages"/>
-            </f:facet>
-
-            <p:dataTable id="regTable" value="#{msg.registrations}" var="reg">
+    <h:form>
+    <p:panel id="panel" header="Notifications">
+        <p:commandButton value="Clear" action="#{nspmodel.clearNotifications()}" update="panel"/>
+            <p:dataTable id="notifyTable" value="#{nspmodel.notificationMsgs}" var="notify">
                 <f:facet name="header">
-                    <h:outputText value="NSP Registrations"/>
+                    <h:outputText value="Notifications"/>
                 </f:facet>
                 <p:column headerText="Endpoint">
-                    <h:outputText value="#{reg.ep}"/>
+                    <h:outputText value="#{notify.ep}"/>
                 </p:column>
-                <p:column headerText="EndpointType">
-                    <h:outputText value="#{reg.ept}"/>
+                <p:column headerText="URI">
+                    <h:outputText value="#{notify.path}"/>
                 </p:column>
-                <p:dataTable id="resTable" value="#{reg.resources}" var="res">
-                    <f:facet name="header">
-                        <h:outputText value="Resources"/>
-                    </f:facet>
-
-                    <p:column headerText="URI">
-                        <h:outputText value="#{res.path}"/>
-                    </p:column>
-                    <p:column headerText="Observable">
-                        <h:outputText value="#{res.obs}"/>
-                    </p:column>
-                    <p:column headerText="CT">
-                        <h:outputText value="#{res.ct}"/>
-                    </p:column>
-                    <p:column headerText="RT">
-                        <h:outputText value="#{res.rt}"/>
-                    </p:column>
-                    <p:column headerText="Iface">
-                        <h:outputText value="#{res.iface}"/>
-                    </p:column>
-                </p:dataTable>
+                <p:column headerText="Payload">
+                    <h:outputText value="#{notify.payload}"/>
+                </p:column>
+                <p:column headerText="DecodedValue">
+                    <h:outputText value="#{notify.decodePayload()}"/>
+                </p:column>
             </p:dataTable>
-
-            <!-- -->
-            <p:dataTable id="reguTable" value="#{msg.registrationUpdates}" var="regu">
-                <f:facet name="header">
-                    <h:outputText value="NSP Registration Updates"/>
-                </f:facet>
-                <p:column headerText="Endpoint">
-                    <h:outputText value="#{reg.ep}"/>
-                </p:column>
-
-            <f:facet name="footer">
-                In total there are #{endpointView.resources.size()} resources.
-            </f:facet>
-        </p:dataTable>
-            <h:outputText value="Automatically Resolve Async Values: " />
-            <p:selectBooleanCheckbox value="#{endpointView.resolveValues}" />
-        </h:form>
     </p:panel>
+    </h:form>
+
+    <h:form>
+    <p:panel id="apanel" header="AsyncResponses">
+        <p:commandButton value="Clear" action="#{nspmodel.clearAsyncNotifications()}" update="apanel"/>
+            <p:dataTable id="asyncTable" value="#{nspmodel.asyncMsgs}" var="async">
+                <f:facet name="header">
+                    <h:outputText value="AsyncResponses"/>
+                </f:facet>
+                <p:column headerText="ID">
+                    <h:outputText value="#{async.id}"/>
+                </p:column>
+                <p:column headerText="Endpoint">
+                    <h:outputText value="#{async.endpoint}"/>
+                </p:column>
+                <p:column headerText="Type">
+                    <h:outputText value="#{async.resourceType}"/>
+                </p:column>
+            </p:dataTable>
+    </p:panel>
+    </h:form>
     <p:messages id="messages" autoUpdate="true"/>
 </h:body>
 </html>
