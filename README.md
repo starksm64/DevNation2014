@@ -47,7 +47,7 @@ You will need a Java SE 7 JDK instllation, and Maven 3+ in order to build and ru
 * [Java SE Downloads](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
   * [Current release, 7u51](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
 * [Maven Downloads](http://maven.apache.org/download.cgi)
-  * [Current release, Maven 3.2.1](http://mirrors.gigenet.com/apache/maven/maven-3/3.2.1/binaries/apache-maven-3.2.1-bin.tar.gz)
+  * [Use release, Maven 3.0.5](http://mirrors.gigenet.com/apache/maven/maven-3/3.0.5/binaries/apache-maven-3.0.5-bin.zip)
 
 
 # Wildfly Setup
