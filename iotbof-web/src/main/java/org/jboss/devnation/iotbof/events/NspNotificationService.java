@@ -26,6 +26,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -69,9 +70,11 @@ public class NspNotificationService implements INotificationService {
       int count = counter.incrementAndGet();
       logger.infof("Begin handleNotification(%d): %s\n", count, msg);
       List<NspNotification> notifications = msg.getNotifications();
+      Date receivedTime = new Date();
       if(notifications != null && notifications.size() > 0) {
          logger.infof("Sending %d NspNotifications\n", notifications.size());
          for(NspNotification notify : notifications) {
+            notify.setReceiveTime(receivedTime);
             notificationMsgEvent.fire(notify);
          }
       }
@@ -80,6 +83,7 @@ public class NspNotificationService implements INotificationService {
       if(asyncResponses != null && asyncResponses.size() > 0) {
          logger.infof("Sending %d NspAsyncResponse\n", asyncResponses.size());
          for (NspAsyncResponse ar : asyncResponses) {
+            ar.setReceiveTime(receivedTime);
             asyncResponseMap.put(ar.getId(), ar);
             logger.infof("Added AsyncResponse: %s, count=%d", ar.getId(), asyncResponseMap.size());
             asyncResponseEvent.fire(ar);

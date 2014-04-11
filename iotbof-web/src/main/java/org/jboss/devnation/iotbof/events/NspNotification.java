@@ -13,8 +13,11 @@ package org.jboss.devnation.iotbof.events;
  * limitations under the License.
  */
 
+import org.jboss.devnation.iotbof.rest.EndpointResourceType;
+
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;
+import java.util.Date;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
@@ -24,7 +27,11 @@ public class NspNotification {
    private String dm;
    private String path;
    private String ct;
-   /** base64-encoded-payload */
+   private Date receiveTime;
+
+   /**
+    * base64-encoded-payload
+    */
    private String payload;
    private String timestamp;
    private String maxAge;
@@ -68,13 +75,23 @@ public class NspNotification {
    public void setPayload(String payload) {
       this.payload = payload;
    }
+
+   public Date getReceiveTime() {
+      return receiveTime;
+   }
+
+   public void setReceiveTime(Date receiveTime) {
+      this.receiveTime = receiveTime;
+   }
+
    /**
     * Decode the base64 encoded payload
-    * @see javax.xml.bind.DatatypeConverter#parseBase64Binary(String)
+    *
     * @return
+    * @see javax.xml.bind.DatatypeConverter#parseBase64Binary(String)
     */
    public String decodePayload() {
-      if(payload != null) {
+      if (payload != null) {
          byte[] frombase64 = DatatypeConverter.parseBase64Binary(payload);
          return new String(frombase64);
       }
@@ -89,6 +106,10 @@ public class NspNotification {
       this.timestamp = timestamp;
    }
 
+   public EndpointResourceType getResourceType() {
+      return new EndpointResourceType(getPath());
+   }
+
    @XmlElement(name = "max-age")
    public String getMaxAge() {
       return maxAge;
@@ -98,12 +119,12 @@ public class NspNotification {
       this.maxAge = maxAge;
    }
 
-@Override
-public String toString() {
-	return "NspNotification [ep=" + ep + ", dm=" + dm + ", path=" + path
-			+ ", ct=" + ct + ", payload=" + payload + ", timestamp="
-			+ timestamp + ", maxAge=" + maxAge + "]";
-}
-   
-   
+   @Override
+   public String toString() {
+      return "NspNotification [ep=" + ep + ", dm=" + dm + ", path=" + path
+         + ", ct=" + ct + ", payload=" + payload + ", timestamp="
+         + timestamp + ", maxAge=" + maxAge + "]";
+   }
+
+
 }

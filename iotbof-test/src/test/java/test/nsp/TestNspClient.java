@@ -78,7 +78,7 @@ public class TestNspClient {
 
    @Test
    @Ignore("relies on mbed-ethernet-1DE41 endpoint")
-   public void queryMbedTemperature() {
+   public void queryMbedTemperature() throws Exception {
       NSPClient.setBasicAuthentication("admin", "secret");
       String temp = NSPClient.queryEndpointResourceValue("domain", "mbed-ethernet-1DE41", "/303/0/5700", false, false);
       System.out.printf("mbed-ethernet-1DE41 temp is: %s\n", temp);

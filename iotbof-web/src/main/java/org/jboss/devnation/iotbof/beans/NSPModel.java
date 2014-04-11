@@ -41,6 +41,7 @@ import java.util.List;
 @ApplicationScoped
 public class NSPModel implements IProgress {
    private static Logger logger = Logger.getLogger(NSPModel.class);
+   private static String VERSION = "1.1";
 
    @EJB
    private NSPConnector nspConnector;
@@ -89,6 +90,10 @@ public class NSPModel implements IProgress {
       endpoints = nspConnector.getEndpoints();
       logger.infof("Initialized with the following endpoints: %s\n", endpoints);
       return null;
+   }
+
+   public String getVersion() {
+      return VERSION;
    }
 
    public boolean isShowLog() {

@@ -29,6 +29,11 @@
             <f:facet name="header">
                 Async Response Detail: #{asyncResponseView.asyncID.id}
             </f:facet>
+            <p:column headerText="Received">
+                <h:outputText value="#{asyncResponseView.response.receiveTime}">
+                    <f:convertDateTime pattern="H:m:s d-M-yy" />
+                </h:outputText>
+            </p:column>
             <h:outputLabel value="DecodedValue: "/>
             <h:outputText value="#{asyncResponseView.response.decodePayload()}"/>
             <h:outputLabel value="RawValue: "/>

@@ -18,6 +18,7 @@ import org.jboss.devnation.iotbof.rest.EndpointResourceType;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;
+import java.util.Date;
 
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
@@ -31,6 +32,7 @@ public class NspAsyncResponse {
    private String ct;
    private String maxAge;
    private String payload;
+   private Date receiveTime;
 
    /**
     *
@@ -110,6 +112,14 @@ public class NspAsyncResponse {
 
    public void setMaxAge(String maxAge) {
       this.maxAge = maxAge;
+   }
+
+   public Date getReceiveTime() {
+      return receiveTime;
+   }
+
+   public void setReceiveTime(Date receiveTime) {
+      this.receiveTime = receiveTime;
    }
 
    public String toString() {

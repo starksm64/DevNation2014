@@ -22,11 +22,19 @@
                 <f:facet name="header">
                     <h:outputText value="Notifications"/>
                 </f:facet>
+                <p:column headerText="Received">
+                    <h:outputText value="#{notify.receiveTime}">
+                        <f:convertDateTime pattern="H:m:s d-M-yy" />
+                    </h:outputText>
+                </p:column>
                 <p:column headerText="Endpoint">
                     <h:outputText value="#{notify.ep}"/>
                 </p:column>
                 <p:column headerText="URI">
                     <h:outputText value="#{notify.path}"/>
+                </p:column>
+                <p:column headerText="Type">
+                    <h:outputText value="#{notify.resourceType}"/>
                 </p:column>
                 <p:column headerText="Payload">
                     <h:outputText value="#{notify.payload}"/>
@@ -47,6 +55,11 @@
                 </f:facet>
                 <p:column headerText="ID">
                     <h:outputText value="#{async.id}"/>
+                </p:column>
+                <p:column headerText="Received">
+                    <h:outputText value="#{async.receiveTime}">
+                        <f:convertDateTime pattern="H:m:s d-M-yy" />
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="Endpoint">
                     <h:outputText value="#{async.endpoint}"/>
