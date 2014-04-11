@@ -2,12 +2,88 @@
 <Diagram>
   <ID>JAVA</ID>
   <OriginalElement />
-  <nodes />
-  <notes />
-  <edges />
-  <settings layout="Hierarchic Group" zoom="1.0" x="0.0" y="0.0" />
+  <nodes>
+    <node x="989.1666666666665" y="558.0">org.jboss.devnation.iotbof.events.NspNotificationService</node>
+    <node x="918.9791666666667" y="0.0">org.jboss.devnation.iotbof.events.AsyncID</node>
+    <node x="429.99999999999994" y="239.0">org.jboss.devnation.iotbof.events.NspNotification</node>
+    <node x="280.8283333333335" y="558.0">org.jboss.devnation.iotbof.events.NspNotificationMsg</node>
+    <node x="205.0" y="309.0">org.jboss.devnation.iotbof.events.NspRegistration</node>
+    <node x="838.0" y="219.0">org.jboss.devnation.iotbof.events.NspAsyncResponse</node>
+    <node x="0.0" y="319.0">org.jboss.devnation.iotbof.events.NspRegistrationUpdate</node>
+    <node x="185.0" y="10.0">org.jboss.devnation.iotbof.events.NspResource</node>
+    <node x="1297.2563472563472" y="418.1334971334971">org.jboss.devnation.iotbof.events.INotificationService</node>
+  </nodes>
+  <notes>
+    <note x="1289.931203931204" y="714.7231777231777">
+      <node>org.jboss.devnation.iotbof.events.NspNotificationService</node>
+      <value>NotificationCallbackURL target for NSP push msgs</value>
+      <edge>
+        <point x="82.20000000000005" y="-64.5" />
+        <point x="1276.8666666666666" y="528.0" />
+        <point x="1464.0" y="528.0" />
+        <point x="0.0" y="12.5" />
+      </edge>
+    </note>
+  </notes>
+  <edges>
+    <edge source="org.jboss.devnation.iotbof.events.NspNotificationService" target="org.jboss.devnation.iotbof.events.NspNotification">
+      <point x="-164.39999999999992" y="-64.5" />
+      <point x="1030.2666666666667" y="528.0" />
+      <point x="721.0" y="528.0" />
+      <point x="97.0" y="124.5" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.events.NspNotificationMsg" target="org.jboss.devnation.iotbof.events.NspRegistration">
+      <point x="-28.125" y="-64.5" />
+      <point x="365.2033333333335" y="528.0" />
+      <point x="307.5" y="528.0" />
+      <point x="0.0" y="54.5" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.events.NspNotificationService" target="org.jboss.devnation.iotbof.events.NspAsyncResponse">
+      <point x="0.0" y="-64.5" />
+      <point x="142.66666666666663" y="144.5" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.events.NspAsyncResponse" target="org.jboss.devnation.iotbof.events.AsyncID">
+      <point x="107.0" y="-144.5" />
+      <point x="1159.0" y="194.0" />
+      <point x="1117.7291666666667" y="194.0" />
+      <point x="66.25" y="84.5" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.events.NspNotificationMsg" target="org.jboss.devnation.iotbof.events.NspAsyncResponse">
+      <point x="84.375" y="-64.5" />
+      <point x="477.7033333333335" y="538.0" />
+      <point x="909.3333333333333" y="538.0" />
+      <point x="-142.66666666666663" y="144.5" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.events.NspNotificationService" target="org.jboss.devnation.iotbof.events.INotificationService">
+      <point x="164.39999999999998" y="-64.5" />
+      <point x="1356.7210483210483" y="536.8271908271907" />
+      <point x="1350.7841932841934" y="419.5462735462736" />
+      <point x="0.0" y="34.5" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.events.NspNotificationMsg" target="org.jboss.devnation.iotbof.events.NspNotification">
+      <point x="28.125" y="-64.5" />
+      <point x="421.4533333333335" y="528.0" />
+      <point x="527.0" y="528.0" />
+      <point x="-97.0" y="124.5" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.events.NspNotificationMsg" target="org.jboss.devnation.iotbof.events.NspRegistrationUpdate">
+      <point x="-84.375" y="-64.5" />
+      <point x="308.9533333333335" y="538.0" />
+      <point x="92.5" y="538.0" />
+      <point x="0.0" y="44.5" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.events.NspRegistration" target="org.jboss.devnation.iotbof.events.NspResource">
+      <point x="0.0" y="-54.5" />
+      <point x="0.0" y="74.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8526536312849162" x="852.0" y="420.83210483210485" />
   <SelectedNodes />
-  <Categories />
+  <Categories>
+    <Category>Properties</Category>
+    <Category>Methods</Category>
+  </Categories>
   <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
 </Diagram>
 

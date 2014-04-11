@@ -29,11 +29,10 @@
             <f:facet name="header">
                 Async Response Detail: #{asyncResponseView.asyncID.id}
             </f:facet>
-            <p:column headerText="Received">
-                <h:outputText value="#{asyncResponseView.response.receiveTime}">
-                    <f:convertDateTime pattern="H:m:s d-M-yy" />
-                </h:outputText>
-            </p:column>
+            <h:outputLabel value="Received: "/>
+            <h:outputText value="#{asyncResponseView.response.receiveTime}">
+                <f:convertDateTime pattern="H:m:s d-M-yy" />
+            </h:outputText>
             <h:outputLabel value="DecodedValue: "/>
             <h:outputText value="#{asyncResponseView.response.decodePayload()}"/>
             <h:outputLabel value="RawValue: "/>
@@ -44,17 +43,7 @@
             <h:outputText value="#{asyncResponseView.response.maxAge}"/>
         </p:panelGrid>
     </f:subview>
-    <f:subview id="resourceView" rendered="#{asyncResponseView.resource != null}">
-        <p:panelGrid columns="2">
-            <f:facet name="header">
-                Resolved Async Response: #{asyncResponseView.asyncID.id}
-            </f:facet>
-            <h:outputLabel value="DecodedValue: "/>
-            <h:outputText value="#{asyncResponseView.resource.resolvedValue}"/>
-            <h:outputLabel value="RawValue: "/>
-            <h:outputText value="#{asyncResponseView.resource.value}"/>
-        </p:panelGrid>
-    </f:subview>
+
 
     <p:separator/>
     <p:messages/>

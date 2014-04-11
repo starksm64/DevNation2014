@@ -2,12 +2,107 @@
 <Diagram>
   <ID>JAVA</ID>
   <OriginalElement />
-  <nodes />
-  <notes />
-  <edges />
-  <settings layout="Hierarchic Group" zoom="1.0" x="0.0" y="0.0" />
-  <SelectedNodes />
-  <Categories />
+  <nodes>
+    <node x="978.9791666666667" y="90.0">org.jboss.devnation.iotbof.beans.ProgressBarBean</node>
+    <node x="37.25" y="586.0">org.jboss.devnation.iotbof.beans.EndpointConverter</node>
+    <node x="226.75" y="398.0">org.jboss.devnation.iotbof.beans.AsyncResponseConverter</node>
+    <node x="784.8541666666667" y="288.0">org.jboss.devnation.iotbof.beans.NSPModel</node>
+    <node x="176.5" y="120.0">org.jboss.devnation.iotbof.beans.AsyncResponseView</node>
+    <node x="9.75" y="368.0">org.jboss.devnation.iotbof.beans.EndpointView</node>
+    <node x="370.0" y="580.0">org.jboss.devnation.iotbof.beans.EndpointResourceView</node>
+    <node x="390.5" y="140.0">org.jboss.devnation.iotbof.events.INotificationService</node>
+    <node x="472.25" y="388.0">org.jboss.devnation.iotbof.beans.NotificationServiceView</node>
+  </nodes>
+  <notes>
+    <note x="197.0" y="7.5">
+      <node>org.jboss.devnation.iotbof.beans.AsyncResponseView</node>
+      <value>asyncresponse.xhtml</value>
+      <edge>
+        <point x="0.0" y="-44.0" />
+        <point x="0.0" y="12.5" />
+      </edge>
+    </note>
+    <note x="807.375" y="148.5">
+      <node>org.jboss.devnation.iotbof.beans.NSPModel</node>
+      <value>index.xhtml\nnotifications.xhtml</value>
+      <edge>
+        <point x="-44.0" y="-124.0" />
+        <point x="916.8541666666667" y="268.0" />
+        <point x="882.4791666666667" y="268.0" />
+        <point x="0.0" y="20.0" />
+      </edge>
+    </note>
+    <note x="0.0" y="151.5">
+      <node>org.jboss.devnation.iotbof.beans.EndpointView</node>
+      <value>endpoint.xhtml</value>
+      <edge>
+        <point x="-49.25" y="-44.0" />
+        <point x="0.0" y="12.5" />
+      </edge>
+    </note>
+    <note x="425.5" y="505.0">
+      <node>org.jboss.devnation.iotbof.beans.EndpointResourceView</node>
+      <value>editresource.xhtml</value>
+      <edge>
+        <point x="0.0" y="-74.0" />
+        <point x="0.0" y="12.5" />
+      </edge>
+    </note>
+    <note x="474.0" y="0.0">
+      <node>org.jboss.devnation.iotbof.events.INotificationService</node>
+      <value>Async response lookup\nNotification msg dispatch</value>
+      <edge>
+        <point x="0.0" y="-24.0" />
+        <point x="0.0" y="20.0" />
+      </edge>
+    </note>
+  </notes>
+  <edges>
+    <edge source="org.jboss.devnation.iotbof.beans.AsyncResponseConverter" target="org.jboss.devnation.iotbof.events.INotificationService">
+      <point x="46.75" y="-14.0" />
+      <point x="367.0" y="268.0" />
+      <point x="526.25" y="268.0" />
+      <point x="-45.25" y="24.0" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.beans.NSPModel" target="org.jboss.devnation.iotbof.events.INotificationService">
+      <point x="-132.0" y="-124.0" />
+      <point x="828.8541666666667" y="268.0" />
+      <point x="707.25" y="268.0" />
+      <point x="135.75" y="24.0" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.beans.AsyncResponseConverter" target="org.jboss.devnation.iotbof.beans.AsyncResponseView">
+      <point x="-46.75" y="-14.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.beans.NotificationServiceView" target="org.jboss.devnation.iotbof.events.INotificationService">
+      <point x="0.0" y="-24.0" />
+      <point x="45.25" y="24.0" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.beans.EndpointConverter" target="org.jboss.devnation.iotbof.beans.EndpointView">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.beans.EndpointView" target="org.jboss.devnation.iotbof.events.INotificationService">
+      <point x="49.25" y="-44.0" />
+      <point x="157.5" y="258.0" />
+      <point x="435.75" y="258.0" />
+      <point x="-135.75" y="24.0" />
+    </edge>
+    <edge source="org.jboss.devnation.iotbof.beans.NSPModel" target="org.jboss.devnation.iotbof.beans.ProgressBarBean">
+      <point x="44.0" y="-124.0" />
+      <point x="1004.8541666666667" y="268.0" />
+      <point x="1039.2291666666667" y="268.0" />
+      <point x="-60.25" y="74.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="601.5" y="441.0" />
+  <SelectedNodes>
+    <node>org.jboss.devnation.iotbof.beans.EndpointResourceView</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Properties</Category>
+  </Categories>
   <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
 </Diagram>
 
