@@ -22,6 +22,7 @@ import org.jboss.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import javax.ejb.Asynchronous;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
@@ -251,4 +252,15 @@ public class NSPConnector {
       return value;
    }
 
+   @Asynchronous
+   public void updateRegistrations(String name, List<String> resources) {
+      for(String uri : resources) {
+         try {
+            logger.infof("Renewing updates for: %s(%s)", name, uri);
+            nspApi.subscribeEndpointResource(domain, name, uri);
+         } catch (Exception e) {
+            logger.warnf("Failed to renew subscription for: %s(%s) msg=%s", name, uri, e.getMessage());
+         }
+      }
+   }
 }

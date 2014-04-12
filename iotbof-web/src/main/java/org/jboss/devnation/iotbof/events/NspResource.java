@@ -71,5 +71,8 @@ public String toString() {
 	return "NspResource [path=" + path + ", iface=" + iface + ", ct=" + ct
 			+ ", obs=" + obs + ", rt=" + rt + "]";
 }
-   
+
+   public boolean isObservable() {
+      return Boolean.valueOf(obs);
+   }
 }

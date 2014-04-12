@@ -148,6 +148,8 @@ public class NSPModel implements IProgress {
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
          "Loading Completed", "Loading Completed"));
     }
+   public void refresh() {
+   }
 
    public List<Endpoint> getEndpoints() {
       logger.infof("Returning %d endpoints\n", getEndpointsSize());

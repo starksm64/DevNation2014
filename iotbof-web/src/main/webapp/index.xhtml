@@ -10,11 +10,6 @@
     <title>NSPView Application</title>
 </h:head>
 <h:body>
-    <f:metadata>
-        <!--
-        <f:event type="postValidate" listener="#{nspmodel.enableNotifications}" />
-        -->
-    </f:metadata>
 
     <h:form id="endpointForm">
         <p:log id="plog" rendered="#{nspmodel.showLog}" widgetVar="plogDlog"/>
@@ -39,19 +34,22 @@
                 </f:facet>
             </p:dataTable>
             <p:commandButton value="Refresh Endpoints" update="panel" actionListener="#{nspmodel.reload}"
-                    onclick="PF('ajaxProgress').start();"/>
+                             onclick="PF('ajaxProgress').start();"/>
             <p:commandButton value="Enable Notifications" actionListener="#{nspmodel.enableNotifications}"
-                             disabled="#{nspmodel.notificationsEnabled}" update="endpointForm" />
+                             title="Register notification handler" disabled="#{nspmodel.notificationsEnabled}"
+                             update="endpointForm"/>
+            <p:commandButton value="Force Notifications" actionListener="#{nspmodel.enableNotifications}"
+                             title="Force registration of the notification handler" update="endpointForm"/>
             <p:commandButton value="Show Debug Log" actionListener="#{nspmodel.toggleShowLog}"
                              rendered="#{!nspmodel.showLog}" update="endpointForm"/>
             <p:commandButton value="Hide Debug Log" actionListener="#{nspmodel.toggleShowLog}"
                              rendered="#{nspmodel.showLog}" update="endpointForm" onclick="plogDlog.hide()"/>
         </p:panel>
     </h:form>
-    <p:separator />
+    <p:separator/>
     <h:form>
-    <p:panel id="appMessages" header="Messages" toggleable="true" toggleSpeed="2000" widgetVar="appMsgPanel">
-        <p:messages id="amessages" autoUpdate="true" showDetail="true" />
+        <p:panel id="appMessages" header="Messages" toggleable="true" toggleSpeed="2000" widgetVar="appMsgPanel">
+            <p:messages id="amessages" autoUpdate="true" showDetail="true"/>
             <f:facet name="options">
                 <p:menu>
                     <p:submenu label="Settings">
@@ -59,45 +57,44 @@
                     </p:submenu>
                 </p:menu>
             </f:facet>
-    </p:panel>
-        <p:panel id="progressMessages" header="ProgressMessages" toggleable="true" toggleSpeed="2000" widgetVar="progressMsgPanel">
+        </p:panel>
+        <p:panel id="progressMessages" header="ProgressMessages" toggleable="true" toggleSpeed="2000"
+                 widgetVar="progressMsgPanel">
             <p:dialog header="Progress Log Details" resizable="true" widgetVar="progressDlog">
-            <p:scrollPanel style="width:700px;height:200px">
-                <p:dataList value="#{nspmodel.progressMessages}" var="msg">
-                    #{msg}
-                </p:dataList>
-            </p:scrollPanel>
+                <p:scrollPanel style="width:700px;height:200px">
+                    <p:dataList value="#{nspmodel.progressMessages}" var="msg">
+                        #{msg}
+                    </p:dataList>
+                </p:scrollPanel>
             </p:dialog>
-            <p:commandButton value="Show" type="button" onclick="PF('progressDlog').show()" />
-            <p:commandButton value="Hide" type="button" onclick="PF('progressDlog').hide()" />
-                <f:facet name="options">
-                    <p:menu>
-                        <p:submenu label="Settings">
-                            <p:menuitem value="Toggle" url="#" icon="ui-icon-newwin" onclick="progressMsgPanel.toggle()"/>
-                        </p:submenu>
-                    </p:menu>
-                </f:facet>
+            <p:commandButton value="Show" type="button" onclick="PF('progressDlog').show()"/>
+            <p:commandButton value="Hide" type="button" onclick="PF('progressDlog').hide()"/>
+            <f:facet name="options">
+                <p:menu>
+                    <p:submenu label="Settings">
+                        <p:menuitem value="Toggle" url="#" icon="ui-icon-newwin" onclick="progressMsgPanel.toggle()"/>
+                    </p:submenu>
+                </p:menu>
+            </f:facet>
             <p:progressBar widgetVar="ajaxProgress" ajax="true" value="#{nspmodel.progress}" labelTemplate="{value}%"
                            interval="500" styleClass="animated">
-                <p:ajax event="complete" listener="#{nspmodel.onComplete}" update="progressMessages" />
+                <p:ajax event="complete" listener="#{nspmodel.onComplete}" update="progressMessages"/>
             </p:progressBar>
         </p:panel>
     </h:form>
-    <p:layout style="min-width:400px; min-height:48px;" id="layout">
-        <p:layoutUnit position="west" resizable="true" minSize="200">
+    <h:form id="status">
+        <p:panel id="info" header="Information">
+            <p:poll interval="5" update="notify"/>
             <h:outputText value="#{nspmodel.connectionStatus}"/>
-        </p:layoutUnit>
-
-        <p:layoutUnit position="center">
+            <p:spacer width="10" />
             <h:outputText value="Powered by: "/>
-            <h:outputLink  value="#{bundle['wildfly.home']}" >
-            	<h:graphicImage value="/images/wildflynewimproved.jpg" width="500"/>
+            <h:outputLink value="#{bundle['wildfly.home']}">
+                <h:graphicImage value="/images/wildfly2.jpeg" width="128"/>
             </h:outputLink>
-        </p:layoutUnit>
-        <p:layoutUnit position="east">
-            <p:button outcome="notifications" value="View Notifications(#{nspmodel.notificationMsgs.size()})" />
-        </p:layoutUnit>
-    </p:layout>
+
+            <p:button id="notify" style="float: right;" outcome="notifications" value="View Notifications(#{nspmodel.notificationMsgs.size()})"/>
+        </p:panel>
+    </h:form>
 
 </h:body>
 

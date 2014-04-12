@@ -27,12 +27,13 @@ import java.util.List;
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
 public class TestINSP {
+   private static String NSPURL = "http://localhost:8080/";
    private static INSP nspApi;
 
    @BeforeClass
    public static void classInit() {
       NSPClient.setBasicAuthentication("admin", "secret");
-      nspApi = NSPClient.buildINSPProxy();
+      nspApi = NSPClient.buildINSPProxy(NSPURL);
    }
 
    @Test

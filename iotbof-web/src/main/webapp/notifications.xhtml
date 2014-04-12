@@ -17,7 +17,8 @@
     </h:form>
     <h:form>
     <p:panel id="panel" header="Notifications">
-        <p:commandButton value="Clear" action="#{nspmodel.clearNotifications()}" update="panel"/>
+        <p:commandButton value="Clear" action="#{nspmodel.clearNotifications()}" update="notifyTable"/>
+        <p:commandButton value="Refresh" actionListener="#{nspmodel.refresh()}" update="notifyTable" ajax="true" />
             <p:dataTable id="notifyTable" value="#{nspmodel.notificationMsgs}" var="notify">
                 <f:facet name="header">
                     <h:outputText value="Notifications"/>
