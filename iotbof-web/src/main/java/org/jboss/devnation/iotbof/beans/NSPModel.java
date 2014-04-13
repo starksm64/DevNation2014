@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -49,12 +50,14 @@ public class NSPModel implements IProgress {
    private INotificationService notificationService;
    /** */
    private List<Endpoint> endpoints;
-   /** */
-   private ArrayList<NspNotification> notificationMsgs = new ArrayList<>();
+   /** Fixed size list of notification msgs */
+   private LinkedList<NspNotification> notificationMsgs = new LinkedList<>();
+   /** Unbounded list of aysnc response msgs */
    private ArrayList<NspAsyncResponse> asyncMsgs = new ArrayList<>();
    private ProgressBarBean progressBar = new ProgressBarBean();
    private boolean notificationsEnabled;
    private boolean showLog;
+   private int notificationsLimit = 100;
 
    @PostConstruct
    private void init() {
@@ -128,6 +131,14 @@ public class NSPModel implements IProgress {
       }
    }
 
+   public int getNotificationsLimit() {
+      return notificationsLimit;
+   }
+
+   public void setNotificationsLimit(int notificationsLimit) {
+      this.notificationsLimit = notificationsLimit;
+   }
+
    @Override
    public void updateProgress(int current, int max, String msg) {
       int pct = current * 100 / max;
@@ -170,7 +181,12 @@ public class NSPModel implements IProgress {
       return size;
    }
    public List<NspNotification> getNotificationMsgs() {
-      return notificationMsgs;
+      // Make a copy to avoid concurrent modification issues
+      List<NspNotification> copy;
+      synchronized (notificationMsgs) {
+         copy = new ArrayList<>(notificationMsgs);
+      }
+      return copy;
    }
    public List<NspAsyncResponse> getAsyncMsgs() {
       return asyncMsgs;
@@ -185,7 +201,11 @@ public class NSPModel implements IProgress {
 
    public void receiveNotificationMsg(@Observes NspNotification msg) {
       logger.infof("receiveNotificationMsg, %s\n", msg);
-      notificationMsgs.add(msg);
+      synchronized (notificationMsgs) {
+         if(notificationMsgs.size() >= notificationsLimit)
+            notificationMsgs.removeFirst();
+         notificationMsgs.add(msg);
+      }
    }
    public void receiveAsyncResponse(@Observes NspAsyncResponse msg) {
       logger.infof("receiveAsyncResponse, %s\n", msg.getId());
