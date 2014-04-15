@@ -20,6 +20,8 @@ import org.jboss.devnation.iotbof.events.INotificationService;
 import org.jboss.devnation.iotbof.events.NspAsyncResponse;
 import org.jboss.devnation.iotbof.events.NspNotification;
 import org.jboss.devnation.iotbof.rest.Endpoint;
+import org.jboss.devnation.iotbof.rest.EndpointResourceType;
+import org.jboss.devnation.iotbof.rest.ObjectID;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -32,6 +34,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -185,6 +188,8 @@ public class NSPModel implements IProgress {
       List<NspNotification> copy;
       synchronized (notificationMsgs) {
          copy = new ArrayList<>(notificationMsgs);
+         // Return the list in the order of last received first
+         Collections.reverse(copy);
       }
       return copy;
    }
@@ -205,6 +210,11 @@ public class NSPModel implements IProgress {
          if(notificationMsgs.size() >= notificationsLimit)
             notificationMsgs.removeFirst();
          notificationMsgs.add(msg);
+      }
+      // TODO, do something with a temperature notification
+      EndpointResourceType type = msg.getResourceType();
+      if(type.getId() == ObjectID.IPSOTemperatureSensor) {
+
       }
    }
    public void receiveAsyncResponse(@Observes NspAsyncResponse msg) {

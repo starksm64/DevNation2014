@@ -22,7 +22,7 @@ import java.util.Date;
 /**
  * @author Scott Stark (sstark@redhat.com) (C) 2014 Red Hat Inc.
  */
-public class NspNotification {
+public class NspNotification implements Comparable<NspNotification> {
    private String ep;
    private String dm;
    private String path;
@@ -82,6 +82,17 @@ public class NspNotification {
 
    public void setReceiveTime(Date receiveTime) {
       this.receiveTime = receiveTime;
+   }
+
+   /**
+    * Comparison based on receiveTime
+    * @param o
+    * @return -1, 0, 1 depending on the comparision of this receiveTime to o's receiveTime
+    */
+   @Override
+   public int compareTo(NspNotification o) {
+      int compareTo = receiveTime.compareTo(o.receiveTime);
+      return compareTo;
    }
 
    /**
