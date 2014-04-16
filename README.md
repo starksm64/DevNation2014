@@ -66,13 +66,13 @@ Pull the pom.xml file into an editor, and edit the properties section shown here
         <!-- The NSP server domain. Probably won't need to change. -->
         <NSPDomain>domain</NSPDomain>
         <!-- The base URL for the NSP REST interface -->
-        <NSPURL>http://red-hat-summit.cloudapp.net:8080/</NSPURL>
+        <NSPURL>http://10.40.132.247:8080/</NSPURL>
         <!-- The username used to login to the NSP server -->
-        <NSPUsername>admin</NSPUsername>
+        <NSPUsername>groupX</NSPUsername>
         <!-- The password used to login to the NSP server -->
-        <NSPPassword>secret</NSPPassword>
+        <NSPPassword>groupX</NSPPassword>
         <!-- The ip address your laptops public network interface as assigned by DHCP -->
-        <wildfly.host>192.168.1.107</wildfly.host>
+        <wildfly.host>10.40.132.x</wildfly.host>
     </properties>
 
 * The NSPDomain binding provides the domain name on the NSP server for the sensors.
