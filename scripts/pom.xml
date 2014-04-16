@@ -18,9 +18,9 @@
         <!-- The base URL for the NSP REST interface -->
         <NSPURL>http://10.40.132.247:8080/</NSPURL>
         <!-- The username used to login to the NSP server -->
-        <NSPUsername>trial</NSPUsername>
+        <NSPUsername>groupX</NSPUsername>
         <!-- The password used to login to the NSP server -->
-        <NSPPassword>secret</NSPPassword>
+        <NSPPassword>groupX</NSPPassword>
         <!-- The ip address your laptops public network interface as assigned by DHCP -->
         <wildfly.host>10.40.132.x</wildfly.host>
     </properties>
@@ -37,6 +37,7 @@
                        <skip>false</skip>
                        <execute-commands>
                            <commands>
+                               <command>/system-property=jboss.bind.address:add(value=${wildfly.host})</command>
                                <command>/subsystem=naming/binding=java\:global\/NSPDomain:add(binding-type=simple,type=java.lang.String,value=${NSPDomain})</command>
                                <command>/subsystem=naming/binding=java\:global\/NSPUsername:add(binding-type=simple,type=java.lang.String,value=${NSPUsername})</command>
                                <command>/subsystem=naming/binding=java\:global\/NSPPassword:add(binding-type=simple,type=java.lang.String,value=${NSPPassword})</command>
