@@ -79,6 +79,8 @@ public class NSPConnector {
    private INSP nspApi;
    private String serverInfo;
    private boolean hasNotificationHandler;
+   /** Change to limit the number of endpoints we load */
+   private int endpointLimit = 80;
 
    /**
     * Default constructor.
@@ -153,7 +155,7 @@ public class NSPConnector {
          taskCount = count;
          task = 0;
          logger.infof("Found %d endpoints\n", count);
-         for (int n = 0; n < count; n ++) {
+         for (int n = 0; n < count && n < endpointLimit; n ++) {
             Endpoint ep = eps.get(n);
             String name = ep.getName();
             progress.updateProgress(task, taskCount, "Loading: "+name);
