@@ -16,7 +16,7 @@
         <!-- The NSP server domain. Probably won't need to change. -->
         <NSPDomain>domain</NSPDomain>
         <!-- The base URL for the NSP REST interface -->
-        <NSPURL>http://10.40.132.247:8080/</NSPURL>
+        <NSPURL>http://red-hat-summit.cloudapp.net:8080/</NSPURL>
         <!-- The username used to login to the NSP server -->
         <NSPUsername>groupX</NSPUsername>
         <!-- The password used to login to the NSP server -->
