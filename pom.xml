@@ -48,6 +48,8 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <!-- Richfaces -->
         <org.richfaces.bom.version>4.2.2.Final</org.richfaces.bom.version>
+
+        <skipTests>true</skipTests>
     </properties>
 
     <build>
@@ -75,6 +77,9 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.17</version>
+                <configuration>
+                   <skipTests>${skipTests}</skipTests>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>

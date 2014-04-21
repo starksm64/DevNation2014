@@ -66,13 +66,13 @@ Pull the pom.xml file into an editor, and edit the properties section shown here
         <!-- The NSP server domain. Probably won't need to change. -->
         <NSPDomain>domain</NSPDomain>
         <!-- The base URL for the NSP REST interface -->
-        <NSPURL>http://10.40.132.247:8080/</NSPURL>
+        <NSPURL>http://red-hat-summit.cloudapp.net:8080/</NSPURL>
         <!-- The username used to login to the NSP server -->
-        <NSPUsername>groupX</NSPUsername>
+        <NSPUsername>hackN</NSPUsername>
         <!-- The password used to login to the NSP server -->
-        <NSPPassword>groupX</NSPPassword>
+        <NSPPassword>hackN</NSPPassword>
         <!-- The ip address your laptops public network interface as assigned by DHCP -->
-        <wildfly.host>10.40.132.x</wildfly.host>
+        <wildfly.host>mydmz.shomehost.com</wildfly.host>
     </properties>
 
 * The NSPDomain binding provides the domain name on the NSP server for the sensors.
@@ -94,9 +94,8 @@ To build the project and bring up the NSPViewer application running under Wildfl
 	1. set the wildfly.home property to the directory path noted above
 	2. cd into the scripts directory and run `mvn wildfly:start wildfly:execute-commands`
 6. cd back to DevNation2014 and build the project by running `mvn install`
-    1. This runs several tests that will fail if the configuration is not correct. You can try running without the tests by using `mvn -DskipTests=true install`.
 7. `cd iotbof-ear`
-8. Run the application by running `mvn -DskipTests=true wildfly:run`
+8. Run the application by running `mvn wildfly:run`
 9. Now you should be able to open http://${wildfly.host}/iotbof-web/index.xhtml in your brower to view the NSPViewer application.
 
 
