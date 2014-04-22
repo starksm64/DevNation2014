@@ -4,10 +4,11 @@ batch
 
 # Change the 'domain' value to that of the NSP; should be fine for lab
 /subsystem=naming/binding=java\:global\/NSPDomain:add(binding-type=simple,type=java.lang.String,value=domain)
-# Change the http://red-hat-summit... URL to that given to you for the lab
+/subsystem=naming/binding=java\:global\/NSPUsername:add(binding-type=simple,type=java.lang.String,value=hack1)
+/subsystem=naming/binding=java\:global\/NSPPassword:add(binding-type=simple,type=java.lang.String,value=hack1)
 /subsystem=naming/binding=java\:global\/NSPURL:add(binding-type=simple,type=java.lang.String,value=http://red-hat-summit.cloudapp.net:8080/)
 # Change this host/port to your wildfly server host/http port.
-/subsystem=naming/binding=java\:global\/NotificationCallbackURL:add(binding-type=simple,type=java.net.URL,value=http://dmz.starkinternational.com:${jboss.http.port:8081}/iotbof-web/rest/events/send)
+/subsystem=naming/binding=java\:global\/NotificationCallbackURL:add(binding-type=simple,type=java.net.URL,value=http://${OPENSHIFT_APP_DNS}:${OPENSHIFT_WILDFLY_HTTP_PORT}/iotbof-web/rest/events/send)
 run-batch
 
 /subsystem=naming:jndi-view
